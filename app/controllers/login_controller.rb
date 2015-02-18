@@ -12,9 +12,10 @@ class LoginController < ApplicationController
       key = SecurityHelper.get_session_key
       user.login_sessions.create! key: SecurityHelper.sha_hash(key), expires_at: 1.week.from_now
       cookies[:sports_b_key] = {
-          value: key,
-          expires: 1.week.from_now
+        value: key,
+        expires: 1.week.from_now
       }
+      flash.clear
       redirect_to :root
     end
   end

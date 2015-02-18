@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   has_secure_password
   has_many :login_sessions
 
@@ -9,7 +8,7 @@ class User < ActiveRecord::Base
   before_save :infer_values
 
   def infer_values
-    self.state = :active if self.state.nil?
+    self.state ||= :active
   end
 
   def active?
@@ -18,5 +17,6 @@ class User < ActiveRecord::Base
 
   def destroy
     self.state = 'deleted'
+    save
   end
 end

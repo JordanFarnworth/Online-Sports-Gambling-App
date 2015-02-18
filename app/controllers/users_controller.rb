@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
 
-  before_action :find_user, only: [:assigned_tickets, :requested_tickets, :group_memberships, :masquerade, :show, :edit, :update, :destroy]
+  before_action :find_user, only: [:show, :edit, :update, :destroy]
   before_action :find_users, only: [:index]
-
 
   def index
     @users = User.all
@@ -31,6 +30,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:display_name, :username, :email, :password, :password_confirmation, :image)
+    params.require(:user).permit(:display_name, :username, :email, :password, :password_confirmation)
   end
 end

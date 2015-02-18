@@ -5,11 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_user
 
-  helper_method :logged_in?
-
-  def index
-  end
-
   def set_current_user
     if cookies[:sports_b_key]
       @current_user = User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookies[:sports_b_key]), Time.now).first
@@ -38,4 +33,5 @@ class ApplicationController < ActionController::Base
 
 
   private :set_current_user
+  helper_method :logged_in?
 end

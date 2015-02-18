@@ -1,4 +1,5 @@
 require 'bcrypt'
+require 'securerandom'
 module SecurityHelper
 
   def self.hash(*a)
@@ -6,7 +7,6 @@ module SecurityHelper
   end
 
   def self.get_session_key
-    require 'securerandom'
     SecureRandom.base64 120
   end
 
@@ -17,7 +17,6 @@ module SecurityHelper
   end
 
   def self.get_attachment_key
-    require 'securerandom'
     SecureRandom.urlsafe_base64 60
   end
 end
