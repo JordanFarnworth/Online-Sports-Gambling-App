@@ -13,3 +13,9 @@
  *= require_tree .
  *= require_self
  */
+
+@import '../../../vendor/assets/stylesheets/_variables.scss';
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+@import '../../../vendor/assets/stylesheets/_bootswatch.scss';
+@import 'font-awesome';

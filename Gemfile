@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use sqlite3 as the database for Active Record
@@ -24,7 +23,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -41,5 +40,28 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'rspec-rails', '~> 3.0'
 end
+
+gem 'delayed_job_active_record'
+
+gem 'bootstrap-sass', '>= 3.2.0'
+gem 'autoprefixer-rails'
+gem 'will_paginate-bootstrap'
+gem 'font-awesome-rails'
+
+group :mysql do
+  gem 'mysql2'
+end
+
+group :postgres do
+  gem 'pg'
+end
+
+gem 'clockwork', git: 'https://github.com/tomykaira/clockwork.git'
+gem 'cancan'
+gem 'bootstrap_form'
+gem 'daemons'
+
 
