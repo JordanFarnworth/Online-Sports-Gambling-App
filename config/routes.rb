@@ -5,9 +5,17 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root to: 'dashboard#index'
 
-  resources :users
+  scope '/', defaults: { format: :html }, constraints: { format: :html } do
+    resources :users
 
-  get 'login' => 'login#index'
-  post 'login' => 'login#verify'
-  delete 'login' => 'login#logout'
+    get 'login' => 'login#index'
+    post 'login' => 'login#verify'
+    delete 'login' => 'login#logout'
+  end
+
+  scope :api, defaults: { format: :json }, constraints: { format: :json } do
+    scope :v1 do
+      resources :users, except: [:new, :edit]
+    end
+  end
 end

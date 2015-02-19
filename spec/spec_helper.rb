@@ -110,3 +110,8 @@ def logged_in_user(opts = {})
   login_session
   request.cookies['sports_b_key'] = @key
 end
+
+def api_key(opts = {})
+  @key = SecurityHelper.get_api_key
+  @api_key = @user.api_keys.create key: @key
+end

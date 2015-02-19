@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
+  has_many :api_keys
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
