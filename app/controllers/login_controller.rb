@@ -9,7 +9,7 @@ class LoginController < ApplicationController
     else
       key = SecurityHelper.get_session_key
       user.login_sessions.create! key: SecurityHelper.sha_hash(key), expires_at: 1.week.from_now
-      cookies.encrypted[:sports_b_key] = {
+      cookie_type[:sports_b_key] = {
         value: key,
         expires: 1.week.from_now
       }
@@ -19,7 +19,7 @@ class LoginController < ApplicationController
   end
 
   def logout
-    ls = LoginSession.find_by key: SecurityHelper.sha_hash(cookies.encrypted[:sports_b_key])
+    ls = LoginSession.find_by key: SecurityHelper.sha_hash(cookie_type[:sports_b_key])
     ls.destroy if ls
     cookies.delete :sports_b_key
     flash[:notice] = 'You have been logged out.'

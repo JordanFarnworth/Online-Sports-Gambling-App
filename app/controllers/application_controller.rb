@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     if cookies[:sports_b_key]
-      @current_user = User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookies.encrypted[:sports_b_key]), Time.now).first
+      @current_user = User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookie_type[:sports_b_key]), Time.now).first
     end
   end
 
@@ -50,6 +50,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def cookie_type
+    Rails.env == 'production' ? cookies.encrypted : cookies
+  end
 
   private :set_current_user
   helper_method :logged_in?

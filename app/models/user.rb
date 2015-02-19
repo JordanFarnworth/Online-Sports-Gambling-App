@@ -5,7 +5,11 @@ class User < ActiveRecord::Base
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
 
-  before_save :infer_values
+  validates_uniqueness_of :username
+  validates_uniqueness_of :email
+  validates_presence_of :state
+
+  before_validation :infer_values
 
   def infer_values
     self.state ||= :active
