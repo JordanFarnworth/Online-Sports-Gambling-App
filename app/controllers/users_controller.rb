@@ -3,6 +3,8 @@ class UsersController < ApplicationController
   before_action :find_user, only: [:show, :edit, :update, :destroy]
   before_action :find_users, only: [:index]
 
+  load_and_authorize_resource
+
   def index
     @users = User.all
   end

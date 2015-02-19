@@ -1,7 +1,5 @@
 class LoginController < ApplicationController
-  def index
-
-  end
+  skip_authorization_check
 
   def verify
     user = User.active.find_by(username: params[:username]).try(:authenticate, params[:password])
