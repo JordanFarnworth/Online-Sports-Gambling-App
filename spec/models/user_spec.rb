@@ -43,4 +43,16 @@ RSpec.describe User, type: :model do
       expect(@user.state).to eql 'active'
     end
   end
+
+  describe 'messages' do
+    before :each do
+      message
+    end
+
+    it 'should only return messages that haven\'t been deleted' do
+      mp = @message.message_participants.find_by_user_id @user.id
+      mp.destroy
+      expect(@user.messages).to_not include(@message)
+    end
+  end
 end
