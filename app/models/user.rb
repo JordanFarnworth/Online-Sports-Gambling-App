@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
   has_many :api_keys
+  has_many :group_memberships
+  has_many :groups, through: :group_memberships
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
@@ -22,6 +24,7 @@ class User < ActiveRecord::Base
 
   def destroy
     self.state = 'deleted'
+    group_memberships.destroy_all
     save
   end
 end

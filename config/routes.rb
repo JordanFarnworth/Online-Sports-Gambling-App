@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
     resources :users
-
+    resources :groups do
+      get 'users' => 'groups#users'
+    end
     get 'login' => 'login#index'
     post 'login' => 'login#verify'
     delete 'login' => 'login#logout'
