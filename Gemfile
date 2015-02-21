@@ -63,5 +63,5 @@ gem 'clockwork', git: 'https://github.com/tomykaira/clockwork.git'
 gem 'cancan'
 gem 'bootstrap_form'
 gem 'daemons'
-
+gem 'jquery-ui-rails'
 
