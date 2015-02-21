@@ -2,8 +2,8 @@ class Group < ActiveRecord::Base
 
   before_save :infer_values
 
-  has_many :group_memberships
-  has_many :users, through: :group_memberships
+  has_many :group_memberships, -> { active },
+  has_many :users, -> { active }, through: :group_memberships
 
   serialize :settings, Hash
 

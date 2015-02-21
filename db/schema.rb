@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221221604) do
+ActiveRecord::Schema.define(version: 20150221233909) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20150221221604) do
     t.integer  "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "roll"
+    t.string   "state"
   end
 
   add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id"

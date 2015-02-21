@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
   has_many :api_keys
-  has_many :group_memberships
-  has_many :groups, through: :group_memberships
+  has_many :group_memberships, -> { active },
+  has_many :groups, -> { active }, through: :group_memberships
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
