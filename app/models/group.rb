@@ -7,6 +7,8 @@ class Group < ActiveRecord::Base
 
   serialize :settings, Hash
 
+  scope :active, -> { where(state: :active) }
+
   def infer_values
     self.state ||= :active
   end
