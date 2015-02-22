@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
   has_many :api_keys
-  has_many :group_memberships, -> { active },
+  has_many :group_memberships, -> { active }
   has_many :groups, -> { active }, through: :group_memberships
 
   scope :active, -> { where(state: :active) }
