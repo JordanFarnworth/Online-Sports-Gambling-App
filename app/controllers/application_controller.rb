@@ -23,6 +23,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    respond_to do |format|
+      format.json do
+        render json: { message: 'not found' }, status: :not_found
+      end
+    end
+  end
+
   def api_request?
     request.format.symbol == :json
   end

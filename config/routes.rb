@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   scope :api, defaults: { format: :json }, constraints: { format: :json } do
     scope :v1 do
       resources :users, except: [:new, :edit]
-      resources :messages, except: [:new, :edit]
+      resources :messages, except: [:new, :edit, :update] do
+        put 'mark_as_read' => 'messages#mark_as_read'
+      end
     end
   end
 end

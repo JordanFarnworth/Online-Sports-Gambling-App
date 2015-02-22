@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
   include PaginationHelper
 
   before_action :find_messages, only: [:index]
-  before_action :find_message, only: [:show, :destroy]
+  before_action :find_message, only: [:show, :destroy, :mark_as_read]
   load_and_authorize_resource
 
   def find_messages
@@ -41,6 +41,27 @@ class MessagesController < ApplicationController
         else
           render json: @message.errors, status: :bad_request
         end
+      end
+    end
+  end
+
+  def destroy
+    mp = @message.message_participants.find_by_user_id! @current_user.id
+    mp.destroy
+    respond_to do |format|
+      format.json do
+        render json: {}, status: :no_content
+      end
+    end
+  end
+
+  def mark_as_read
+    authorize! :mark_as_read, @message
+    mp = @message.message_participants.find_by_user_id! @current_user.id
+    mp.mark_as_read!
+    respond_to do |format|
+      format.json do
+        render json: message_json(@message), status: :ok
       end
     end
   end
