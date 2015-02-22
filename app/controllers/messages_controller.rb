@@ -1,22 +1,23 @@
 class MessagesController < ApplicationController
-  include Api::V1::MessageParticipant
+  include Api::V1::Message
+  include PaginationHelper
 
   before_action :find_messages, only: [:index]
   before_action :find_message, only: [:show, :destroy]
-  load_and_authorize_resource class: 'MessageParticipant'
+  load_and_authorize_resource
 
   def find_messages
-    @messages = @current_user.all_messages
+    @messages = @current_user.messages
   end
 
   def find_message
-    @message = @current_user.all_messages.find_by_message_id! params[:id] || params[:message_id]
+    @message = @current_user.messages.find params[:id] || params[:message_id]
   end
 
   def index
     respond_to do |format|
       format.json do
-        render json: message_participants_json(@messages, params[:include] || {}), status: :ok
+        render json: pagination_json(@messages, :messages_json, params[:include] || {}), status: :ok
       end
     end
   end
@@ -24,8 +25,28 @@ class MessagesController < ApplicationController
   def show
     respond_to do |format|
       format.json do
-        render json: message_participant_json(@message, params[:include] || {}), status: :ok
+        render json: message_json(@message, params[:include] || {}), status: :ok
       end
     end
+  end
+
+  def create
+    @message = Message.new message_params
+    @message.sender = @current_user
+    saved = @message.save
+    respond_to do |format|
+      format.json do
+        if saved
+          render json: message_json(@message, params[:include] || {}), status: :ok
+        else
+          render json: @message.errors, status: :bad_request
+        end
+      end
+    end
+  end
+
+  private
+  def message_params
+    params.require(:message).permit(:subject, :body, message_participants_attributes: [:id, :user_id])
   end
 end

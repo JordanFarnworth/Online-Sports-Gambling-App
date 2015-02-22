@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
   has_many :api_keys
-  has_many :all_messages, -> { includes :message }, class_name: 'MessageParticipant'
+  has_many :message_participants, -> { active }
+  has_many :messages, -> { active }, through: :message_participants
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
@@ -24,9 +25,5 @@ class User < ActiveRecord::Base
   def destroy
     self.state = 'deleted'
     save
-  end
-
-  def messages
-    all_messages.active
   end
 end

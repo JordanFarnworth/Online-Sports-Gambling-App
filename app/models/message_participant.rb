@@ -1,9 +1,10 @@
 class MessageParticipant < ActiveRecord::Base
   belongs_to :user
-  belongs_to :message
+  belongs_to :message, inverse_of: :message_participants
 
-  validates_presence_of :user
-  validates_presence_of :message
+  validates_each :user, :message do |record, attr, value|
+    record.errors.add attr, 'is not valid' unless value && value.active?
+  end
   validates_inclusion_of :state, in: %w(unread read deleted)
 
   scope :active, -> { where.not(state: :deleted) }

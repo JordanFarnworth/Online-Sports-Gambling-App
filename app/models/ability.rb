@@ -8,9 +8,10 @@ class Ability
     unless user.new_record?
       can :read, User
       can :update, User, id: user.id
-      can :read, MessageParticipant do |msg|
-        msg.user == user
+      can :read, Message do |msg|
+        msg.users.include? user
       end
+      can :create, Message
     end
   end
 end
