@@ -7,7 +7,6 @@ Rails.application.routes.draw do
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
     resources :users
-
     get 'login' => 'login#index'
     post 'login' => 'login#verify'
     delete 'login' => 'login#logout'
@@ -17,6 +16,9 @@ Rails.application.routes.draw do
     scope :v1 do
       resources :users, except: [:new, :edit]
       resources :messages, except: [:new, :edit]
+      resources :groups, except: [:new, :edit] do
+        get 'users' => 'groups#users'
+      end
     end
   end
 end

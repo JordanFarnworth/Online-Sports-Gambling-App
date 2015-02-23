@@ -107,6 +107,18 @@ def ability
   @ability = Ability.new @user
 end
 
+def group(opts = {})
+  opts[:name] ||= SecureRandom.uuid
+  @group = Group.create name: opts[:name]
+end
+
+def group_with_user(opts = {})
+  user opts
+  group opts
+  @group_membership = @user.group_memberships.create group: @group
+end
+alias :user_with_group :group_with_user
+
 def logged_in_user(opts = {})
   user opts
   login_session

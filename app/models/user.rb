@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :login_sessions
   has_many :api_keys
+  has_many :group_memberships, -> { active }
+  has_many :groups, -> { active }, through: :group_memberships
   has_many :message_participants, -> { active }
   has_many :messages, -> { active }, through: :message_participants
 
@@ -28,6 +30,7 @@ class User < ActiveRecord::Base
 
   def destroy
     self.state = 'deleted'
+    group_memberships.destroy_all
     save
   end
 end
