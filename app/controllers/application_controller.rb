@@ -23,6 +23,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    respond_to do |format|
+      format.json do
+        render json: { message: 'not found' }, status: :not_found
+      end
+    end
+  end
+
   def api_request?
     request.format.symbol == :json
   end
@@ -40,7 +48,6 @@ class ApplicationController < ActionController::Base
     if cookie_type[:sports_b_key]
       @current_user ||= User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookie_type[:sports_b_key]), Time.now).first
     end
-    render json: @current_user, status: :ok if @current_user && api_request?
   end
 
   def current_user

@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   has_many :api_keys
   has_many :group_memberships, -> { active }
   has_many :groups, -> { active }, through: :group_memberships
+  has_many :message_participants, -> { active }
+  has_many :messages, -> { active }, through: :message_participants
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
@@ -16,6 +18,10 @@ class User < ActiveRecord::Base
 
   def infer_values
     self.state ||= :active
+  end
+
+  def all_messages
+    message_participants.includes(:message).order(:created_at)
   end
 
   def active?
