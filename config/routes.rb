@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
     resources :users
+    resources :messages, except: [:edit]
 
     get 'login' => 'login#index'
     post 'login' => 'login#verify'

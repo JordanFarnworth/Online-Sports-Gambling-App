@@ -6,13 +6,17 @@ class MessageParticipant < ActiveRecord::Base
     record.errors.add attr, 'is not valid' unless value && value.active?
   end
   validates_inclusion_of :state, in: %w(unread read deleted)
+  validates_inclusion_of :user_type, in: %w(sender recipient)
 
   scope :active, -> { where.not(state: :deleted) }
   scope :read, -> { where(state: :read) }
   scope :unread, -> { where(state: :unread) }
+  scope :as_sender, -> { where(user_type: :sender) }
+  scope :as_recipient, -> { where(user_type: :recipient) }
 
   before_validation do
     self.state ||= :unread
+    self.user_type ||= :recipient
   end
 
   def mark_as_read

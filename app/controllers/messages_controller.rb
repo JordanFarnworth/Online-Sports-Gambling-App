@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
 
   def find_messages
     return unless logged_in?
-    @messages = @current_user.all_messages
+    @messages = @current_user.all_messages if api_request?
   end
 
   def find_message
@@ -21,8 +21,11 @@ class MessagesController < ApplicationController
   def index
     respond_to do |format|
       format.json do
+        @messages = @messages.as_sender if params[:scope] == 'sent'
+        @messages = @messages.as_recipient if params[:scope] == 'inbox'
         render json: pagination_json(@messages, :messages_json, params[:include] || {}), status: :ok
       end
+      format.html
     end
   end
 

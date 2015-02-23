@@ -25,6 +25,13 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
+          <li><%= link_to messages_path do %>
+            Messages
+            <% count = @current_user.all_messages.unread.count %>
+            <% if count > 0 %>
+              <span class="badge"><%= count %></span>
+            <% end %>
+          <% end %></li>
           <li class="dropdown">
             <a type="button" data-toggle="dropdown" href="#">
               <%= @current_user.display_name %>
