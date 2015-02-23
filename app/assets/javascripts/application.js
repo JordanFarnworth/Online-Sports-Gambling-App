@@ -11,8 +11,12 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
+//= require jquery.readyselector
+//= require jquery.simplePagination
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require jquery-ui
+//= require handlebars
 //= require_tree .
