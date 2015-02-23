@@ -92,7 +92,9 @@ def user(opts = {})
   opts[:username] ||= uuid
   opts[:display_name] ||= uuid
   opts[:email] ||= uuid + '@test.com'
-  @user = User.create! username: opts[:username], display_name: opts[:display_name], email: opts[:email], password: opts[:password]
+  user = User.create! username: opts[:username], display_name: opts[:display_name], email: opts[:email], password: opts[:password]
+  @user ||= user
+  user
 end
 
 def login_session(opts = {})
@@ -114,4 +116,16 @@ end
 def api_key(opts = {})
   @key = SecurityHelper.get_api_key
   @api_key = @user.api_keys.create key: @key
+end
+
+def message(opts = {})
+  user unless @user
+  opts[:subject] ||= 'asdf'
+  opts[:body] ||= 'asdf'
+  opts[:recipients] ||= [user.id]
+  @message = Message.new subject: opts[:subject], body: opts[:body], sender: @user
+  opts[:recipients].each do |i|
+    @message.message_participants.build({ user_id: i })
+  end
+  @message.save
 end
