@@ -1,6 +1,6 @@
 class Group < ActiveRecord::Base
 
-  before_save :infer_values
+  before_validation :infer_values
 
   has_many :group_memberships, -> { active }
   has_many :users, -> { active }, through: :group_memberships
@@ -8,6 +8,9 @@ class Group < ActiveRecord::Base
   serialize :settings, Hash
 
   scope :active, -> { where(state: :active) }
+
+  validates :name, length: { minimum: 3 }
+  validates_inclusion_of :state, in: %w(active deleted)
 
   def infer_values
     self.state ||= :active

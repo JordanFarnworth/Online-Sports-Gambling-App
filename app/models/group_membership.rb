@@ -4,6 +4,9 @@ class GroupMembership < ActiveRecord::Base
 
   scope :active, -> { where(state: :active) }
 
+  validates :group, uniqueness: { scope: :user }
+  validates_inclusion_of :state, in: %w(active deleted)
+
   before_validation do
     self.state ||= :active
   end
