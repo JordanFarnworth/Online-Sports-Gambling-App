@@ -8,9 +8,12 @@ class Ability
     unless user.new_record?
       can :read, User
       can :update, User, id: user.id
-      can [:read, :destroy, :mark_as_read], Message do |msg|
-        msg.users.include? user
+
+      # Messaging permissions
+      can [:read, :destroy, :update], MessageParticipant do |msg|
+        msg.user == user
       end
+      can :read, Message
       can :create, Message
     end
   end

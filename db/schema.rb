@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221235423) do
+ActiveRecord::Schema.define(version: 20150221020002) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,26 +24,6 @@ ActiveRecord::Schema.define(version: 20150221235423) do
   end
 
   add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
-
-  create_table "group_memberships", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "state"
-    t.string   "role"
-  end
-
-  add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id"
-  add_index "group_memberships", ["user_id"], name: "index_group_memberships_on_user_id"
-
-  create_table "groups", force: :cascade do |t|
-    t.string   "name"
-    t.string   "state"
-    t.text     "settings"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "login_sessions", force: :cascade do |t|
     t.integer  "user_id"

@@ -67,14 +67,14 @@ RSpec.describe MessagesController, type: :controller do
     end
   end
 
-  describe 'PUT mark_as_read' do
+  describe 'PUT update' do
     before :each do
       message
       logged_in_user
     end
 
     it 'should mark a message as read' do
-      put :mark_as_read, format: :json, message_id: @message.id
+      put :update, format: :json, id: @message.id, message: { state: 'read' }
       json = JSON.parse(response.body)
       expect(response.status).to eql 200
       expect(json['state']).to eql 'read'

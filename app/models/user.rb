@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
     self.state ||= :active
   end
 
+  def all_messages
+    message_participants.includes(:message).order(:created_at)
+  end
+
   def active?
     state == 'active'
   end
