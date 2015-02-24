@@ -21,6 +21,12 @@ RSpec.describe MessagesController, type: :controller do
       json = JSON.parse(response.body)['results']
       expect(json.map { |m| m['id'] }).to_not include(@message.id)
     end
+
+    it 'should return information about the sender' do
+      get :index, format: :json, include: ['sender']
+      json = JSON.parse(response.body)['results']
+      expect(json.map { |m| m['sender']['id'] }).to include(@user.id)
+    end
   end
 
   describe 'GET show' do
@@ -40,6 +46,12 @@ RSpec.describe MessagesController, type: :controller do
       logged_in_user
       get :show, format: :json, id: @message.id
       expect(response.status).to eql 404
+    end
+
+    it 'should return information about the sender' do
+      get :show, format: :json, id: @message.id, include: ['sender']
+      json = JSON.parse(response.body)
+      expect(json['sender']['id']).to eql @user.id
     end
   end
 

@@ -1,4 +1,13 @@
+<%= render 'message_sidebar_template' %>
 <select class="form-control" id="messages_selector">
   <option value="inbox">Inbox</option>
   <option value="sent">Sent</option>
 </select>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="message_inbox_container">
+    <ul class="pagination" id="message_inbox_pagination"></ul>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="message_sent_container">
+    <ul class="pagination" id="message_sent_pagination"></ul>
+  </div>
+</div>
