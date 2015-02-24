@@ -18,6 +18,7 @@ module Api::V1::Message
   end
 
   def messages_json(messages, includes = {})
+    messages = messages.includes(message: [:message_participants, :sender])
     messages.map { |m| message_json(m, includes) }
   end
 end

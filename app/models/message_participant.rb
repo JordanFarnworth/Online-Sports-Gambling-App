@@ -7,6 +7,7 @@ class MessageParticipant < ActiveRecord::Base
   end
   validates_inclusion_of :state, in: %w(unread read deleted)
   validates_inclusion_of :user_type, in: %w(sender recipient)
+  validates :message_id, uniqueness: { scope: :user_id }
 
   scope :active, -> { where.not(state: :deleted) }
   scope :read, -> { where(state: :read) }

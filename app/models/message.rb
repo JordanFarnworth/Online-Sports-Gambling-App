@@ -33,7 +33,11 @@ class Message < ActiveRecord::Base
   end
 
   def participants
-    message_participants.pluck(:user_id)
+    if message_participants.loaded?
+      message_participants.map(&:user_id)
+    else
+      message_participants.pluck(:user_id)
+    end
   end
 
   def active?

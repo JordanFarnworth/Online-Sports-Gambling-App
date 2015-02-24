@@ -19,3 +19,12 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 @import '../../../vendor/assets/stylesheets/_bootswatch.scss';
+
+.break-words {
+  word-break: break-all;
+}
+
+.scroll {
+  overflow-y: scroll;
+  height: 600px;
+}

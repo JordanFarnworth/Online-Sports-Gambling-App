@@ -1,8 +1,14 @@
+<%= render partial: 'message_template' %>
 <div class="row" style="margin-left: 5px;">
   <div class="col-md-3">
     <%= render partial: 'sidebar' %>
   </div>
   <div class="col-md-9">
-    
+    <ul class="nav nav-pills navbar-inverse" style="margin-bottom: 2px;">
+      <li><button class="btn btn-success"><i class="fa fa-pencil-square-o"></i></button></li>
+      <li><button class="btn btn-danger"><i class="fa fa-times"></i></button></li>
+    </ul>
+    <div id="message_pane">
+    </div>
   </div>
 </div>
