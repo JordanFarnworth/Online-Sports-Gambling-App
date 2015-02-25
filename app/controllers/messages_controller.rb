@@ -73,7 +73,7 @@ class MessagesController < ApplicationController
     @users = User.active
     if params[:search_term]
       t = params[:search_term]
-      @users = @users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ?', "%#{t}%", "%#{t}%", "%#{t}%")
+      @users = @users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ? AND id != ?', "%#{t}%", "%#{t}%", "%#{t}%", @current_user.id)
     end
     render json: @users.paginate(pagination_help).pluck(:id, :display_name).map { |u| { id: u[0], display_name: u[1] } }, status: :ok
   end

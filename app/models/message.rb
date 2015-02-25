@@ -27,7 +27,7 @@ class Message < ActiveRecord::Base
   end
 
   after_create do
-    unless users.where(id: sender_id).exists?
+    unless message_participants.where(user_id: sender_id, user_type: :sender).exists?
       message_participants.create user: sender, state: :read, user_type: :sender
     end
   end

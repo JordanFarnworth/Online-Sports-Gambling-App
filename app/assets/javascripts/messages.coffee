@@ -7,6 +7,8 @@ $('.messages.index, .messages.show').ready ->
   $('.message-listing').click renderMessage
   $('button[name=new-message]').click openMessageModal
   $('#recipients').autocomplete autocompleteParams()
+  $('[name=clear-message-modal]').click clearModal
+  $('[name=create-message]').click createMessage
   $('#messages_selector').on 'change', (ev) ->
     if $('#messages_selector').val() == 'inbox'
       $('#message_inbox_container').parent('.tab-pane').addClass('active')
@@ -58,6 +60,50 @@ renderMessage = (ev) ->
 openMessageModal = (ev) ->
   $('[name=new-message-modal]').modal()
 
+clearModal = (skip_confirmation = false) ->
+  unless skip_confirmation
+    return unless confirm('Are you sure you want to clear this message?')
+  $('#message').val('')
+  $('#recipients').val('')
+  $('#subject').val('')
+  $('[name=remove-recipient]').parents('li:first').remove()
+
+addErrorMessage = (selector, message) ->
+  selector.addClass('has-error')
+  selector.append($('<span class="help-block">' + message + '</span>'))
+
+validateMessage = ->
+  $('.has-error').removeClass('has-error')
+  $('span.help-block').remove()
+  recips = $.map $('[name=recipient]'), (val, i) ->
+    parseInt($(val).val())
+  addErrorMessage($('label[for=recipients]').parents('div.form-group:first'), 'must include a valid recipient') if recips.length == 0 || (recips.length == 1 && recips[0] == ENV.current_user)
+
+  addErrorMessage($('#subject').parents('div.form-group:first'), 'must be lengthier than 3 characters') if $('#subject').val().length < 3
+  addErrorMessage($('#message').parents('div.form-group:first'), 'must be lengthier than 3 characters') if $('#message').val().length < 3
+  return $('.help-block').length == 0
+
+createMessage = (ev) ->
+  return unless validateMessage()
+  recips = $.map $('[name=recipient]'), (val, i) ->
+    parseInt($(val).val())
+
+  $.ajax '/api/v1/messages',
+    type: 'post'
+    dataType: 'json'
+    data:
+      message:
+        subject: $('#subject').val()
+        body: $('#message').val()
+        sender_id: ENV.current_user
+        message_participants_attributes:
+          recips.map (val, i) ->
+            { user_id: val }
+    success: (data) ->
+      $('[name=new-message-modal]').css('display', 'none')
+      clearModal(true)
+      $('[name=message-success-modal]').modal()
+
 autocompleteParams = ->
   {
     source:(request, response) ->
@@ -79,5 +125,8 @@ autocompleteParams = ->
       template = Handlebars.compile($('#recipient_template').html())
       comp = $(template({ name: ui.item.label, id: ui.item.value }))
       $('#recipients').val('')
-      $('.input-box').prepend(comp)
+      #$('.input-box').prepend(comp)
+      $('.ac-token-list').append(comp)
+      $(comp).find('[name=remove-recipient]').click (ev) ->
+        $(ev.target).parents('li:first').remove()
   }
