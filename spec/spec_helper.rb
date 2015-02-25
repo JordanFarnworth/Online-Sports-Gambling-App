@@ -143,3 +143,15 @@ def message(opts = {})
   end
   @message.save
 end
+
+def role(opts = {})
+  opts[:name] ||= SecureRandom.uuid
+  @role = Role.create name: opts[:name], protection_type: opts[:protection_type]
+end
+
+def user_with_role(opts = {})
+  user opts
+  role opts
+  @role_membership = @role.add_user @user
+end
+alias :role_with_user :user_with_role

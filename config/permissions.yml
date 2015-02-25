@@ -1,0 +1,7 @@
+manage_roles:
+  component: roles
+  description: Allows a user to create/edit/delete roles
+
+assign_roles:
+  component: roles
+  description: Allows a user to assign users to roles
