@@ -25,10 +25,11 @@
         <%= bootstrap_form_tag url: '#' do |f| %>
           <div class="form-group">
             <label class="control-label" for="recipients">Recipients</label>
-            <div class="input-box form-control" for="recipients">
+            <div class="input-box" for="recipients">
               <ul class="ac-token-list"></ul>
-              <input style="box-shadow: none; outline: none;" class="ui-autocomplete-input" name="recipients" id="recipients" type="search" autocomplete="off">
+
             </div>
+            <input class="form-control ui-autocomplete-input" name="recipients" id="recipients" type="search" autocomplete="off">
           </div>
           <%= f.text_field :subject %>
           <%= f.text_area :message, rows: 8 %>
@@ -37,7 +38,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-info" name="clear-message-modal">Clear</button>
-        <button type="button" class="btn btn-primary" name="create-message">Save changes</button>
+        <button type="button" class="btn btn-primary" name="create-message">Send Message</button>
       </div>
     </div>
   </div>

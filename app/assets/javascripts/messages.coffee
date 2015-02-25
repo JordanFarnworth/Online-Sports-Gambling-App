@@ -7,7 +7,8 @@ $('.messages.index, .messages.show').ready ->
   $('.message-listing').click renderMessage
   $('button[name=new-message]').click openMessageModal
   $('#recipients').autocomplete autocompleteParams()
-  $('[name=clear-message-modal]').click clearModal
+  $('[name=clear-message-modal]').click ->
+    clearModal()
   $('[name=create-message]').click createMessage
   $('[name=delete-message]').click deleteMessage
   $('#messages_selector').on 'change', (ev) ->
@@ -85,12 +86,13 @@ openMessageModal = (ev) ->
   $('[name=new-message-modal]').modal()
 
 clearModal = (skip_confirmation = false) ->
-  unless skip_confirmation
-    return unless confirm('Are you sure you want to clear this message?')
+  return unless skip_confirmation || confirm('Are you sure you want to clear this message?')
   $('#message').val('')
   $('#recipients').val('')
   $('#subject').val('')
-  $('[name=remove-recipient]').parents('li:first').remove()
+  $('[name=remove-recipient]').parents('li.ac-token').remove()
+  $('.has-error').removeClass('has-error')
+  $('span.help-block').remove()
 
 addErrorMessage = (selector, message) ->
   selector.addClass('has-error')
@@ -111,6 +113,7 @@ createMessage = (ev) ->
   return unless validateMessage()
   recips = $.map $('[name=recipient]'), (val, i) ->
     parseInt($(val).val())
+  recips = $.unique(recips);
 
   $.ajax '/api/v1/messages',
     type: 'post'
@@ -124,7 +127,7 @@ createMessage = (ev) ->
           recips.map (val, i) ->
             { user_id: val }
     success: (data) ->
-      $('[name=new-message-modal]').css('display', 'none')
+      $('[name=new-message-modal]').modal('hide')
       clearModal(true)
       $('[name=message-success-modal]').modal()
 
