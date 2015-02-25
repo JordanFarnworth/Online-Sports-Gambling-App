@@ -19,4 +19,5 @@
 //= require bootstrap-sprockets
 //= require jquery-ui
 //= require handlebars
+//= require bootbox
 //= require_tree .

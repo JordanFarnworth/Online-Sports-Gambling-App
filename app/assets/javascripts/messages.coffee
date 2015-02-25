@@ -9,6 +9,7 @@ $('.messages.index, .messages.show').ready ->
   $('#recipients').autocomplete autocompleteParams()
   $('[name=clear-message-modal]').click clearModal
   $('[name=create-message]').click createMessage
+  $('[name=delete-message]').click deleteMessage
   $('#messages_selector').on 'change', (ev) ->
     if $('#messages_selector').val() == 'inbox'
       $('#message_inbox_container').parent('.tab-pane').addClass('active')
@@ -34,10 +35,21 @@ loadMessages = (selector, pagination_selector, endpoint, page = 1) ->
       template = Handlebars.compile($('script#message_sidebar_template').html())
       $(selector + ' i').remove()
       $.each data['results'], (i) ->
-        temp = $(template({ id: this.id, subject: this.subject, sender: this.sender.display_name, body: this.body, preview: this.body.substring(0, 100), created_at: new Date(this.created_at).toLocaleString() }))
+        recips = mapRecipients(this.participants)
+        temp = $(template({ id: this.id, subject: this.subject, sender: this.sender.display_name, \
+          body: this.body, preview: this.body.substring(0, 100), recipients: recips, \
+          created_at: new Date(this.created_at).toLocaleString(), is_sender: this.sender.id == ENV.current_user, \
+          truncated_recipients: mapRecipients(this.participants).substring(0, 100) + (if recips.length > 100 then '...' else ''), \
+          unread: this.state == 'unread' }))
         $(selector).append(temp)
         temp.find('a:first').click renderMessage
       $(pagination_selector).pagination({ edges: 0, displayedPages: 3, items: data.count, itemsOnPage: data.per_page, currentPage: page, onPageClick: (if selector == '#message_inbox_container' then handleInboxPagination else handleSentPagination) })
+
+mapRecipients = (recips) ->
+  r = $(recips).map (val, i) ->
+    this.display_name
+
+  r.toArray().join ', '
 
 handleInboxPagination = (page, ev) ->
   ev.preventDefault()
@@ -55,7 +67,19 @@ renderMessage = (ev) ->
   targ.addClass('active')
 
   template = Handlebars.compile($('script#message_template').html())
-  $('#message_pane').html($(template({ subject: targ.data('subject'), sender: targ.data('sender'), body: targ.data('body'), created_at: targ.data('created-at') })))
+  $('#message_pane').html($(template({ subject: targ.data('subject'), sender: targ.data('sender'), \
+    recipients: targ.data('recipients'), body: targ.data('body').split('\n').join('<br>'), created_at: targ.data('created-at') })))
+
+  if targ.data('unread')
+    $.ajax
+      url: "/api/v1/messages/#{targ.data('id')}"
+      data:
+        message:
+          state: 'read'
+      type: 'put'
+      success: ->
+        targ.attr('data-unread', false)
+        targ.find('i[name=unread-marker]:first').remove()
 
 openMessageModal = (ev) ->
   $('[name=new-message-modal]').modal()
@@ -103,6 +127,20 @@ createMessage = (ev) ->
       $('[name=new-message-modal]').css('display', 'none')
       clearModal(true)
       $('[name=message-success-modal]').modal()
+
+deleteMessage = (ev) ->
+  return unless $('.message-listing.active').length == 1 # Don't show dialog unless a message is selected
+  bootbox.confirm 'Are you sure you want to delete this message?', (result) ->
+    return unless result
+    targ = $('a.message-listing.active:first')
+    $.ajax
+      url: "/api/v1/messages/#{targ.data('id')}"
+      dataType: 'json'
+      data: {}
+      type: 'delete'
+      success: (data) ->
+        targ.parents('div:first').remove()
+        $('#message_pane div').remove()
 
 autocompleteParams = ->
   {

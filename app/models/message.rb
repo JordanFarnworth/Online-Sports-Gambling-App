@@ -32,12 +32,12 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def participants
-    if message_participants.loaded?
-      message_participants.map(&:user_id)
-    else
-      message_participants.pluck(:user_id)
+  def participants(with_sender = false)
+    mp = message_participants.map { |m| { user_id: m.user_id, display_name: m.user.display_name } }
+    unless with_sender
+      mp.reject! { |m| m[:user_id] == sender_id }
     end
+    mp
   end
 
   def active?

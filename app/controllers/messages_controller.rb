@@ -15,7 +15,7 @@ class MessagesController < ApplicationController
 
   def find_message
     return unless logged_in?
-    @message = @current_user.all_messages.find_by! message_id: (params[:id] || params[:message_id])
+    @message = @current_user.all_messages.includes(message: [{ message_participants: :user }]).find_by! message_id: (params[:id] || params[:message_id])
   end
 
   def index
