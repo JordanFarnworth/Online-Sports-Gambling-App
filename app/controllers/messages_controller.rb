@@ -69,6 +69,15 @@ class MessagesController < ApplicationController
     end
   end
 
+  def search_recipients
+    @users = User.active
+    if params[:search_term]
+      t = params[:search_term]
+      @users = @users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ?', "%#{t}%", "%#{t}%", "%#{t}%")
+    end
+    render json: @users.paginate(pagination_help).pluck(:id, :display_name).map { |u| { id: u[0], display_name: u[1] } }, status: :ok
+  end
+
   private
   def message_params
     if params[:action] == 'create'

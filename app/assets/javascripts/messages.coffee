@@ -4,8 +4,9 @@
 $('.messages.index, .messages.show').ready ->
   loadInboxMessages()
   loadSentMessages()
-  $('.message-listing').click (ev) ->
-    renderMessage(ev)
+  $('.message-listing').click renderMessage
+  $('button[name=new-message]').click openMessageModal
+  $('#recipients').autocomplete autocompleteParams()
   $('#messages_selector').on 'change', (ev) ->
     if $('#messages_selector').val() == 'inbox'
       $('#message_inbox_container').parent('.tab-pane').addClass('active')
@@ -53,3 +54,30 @@ renderMessage = (ev) ->
 
   template = Handlebars.compile($('script#message_template').html())
   $('#message_pane').html($(template({ subject: targ.data('subject'), sender: targ.data('sender'), body: targ.data('body'), created_at: targ.data('created-at') })))
+
+openMessageModal = (ev) ->
+  $('[name=new-message-modal]').modal()
+
+autocompleteParams = ->
+  {
+    source:(request, response) ->
+      $.ajax
+        url: "/api/v1/messages/recipients"
+        dataType: "json"
+        data:
+          search_term: request.term
+
+        success: (data) ->
+          data = $.map data, (obj, i) ->
+            {label: obj['display_name'], value: obj['id']}
+          response data
+
+    select:(event, ui) ->
+      event.preventDefault()
+      return unless ui.item
+
+      template = Handlebars.compile($('#recipient_template').html())
+      comp = $(template({ name: ui.item.label, id: ui.item.value }))
+      $('#recipients').val('')
+      $('.input-box').prepend(comp)
+  }
