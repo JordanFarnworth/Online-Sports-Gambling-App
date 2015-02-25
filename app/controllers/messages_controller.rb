@@ -10,19 +10,22 @@ class MessagesController < ApplicationController
 
   def find_messages
     return unless logged_in?
-    @messages = @current_user.all_messages
+    @messages = @current_user.all_messages if api_request?
   end
 
   def find_message
     return unless logged_in?
-    @message = @current_user.all_messages.find_by! message_id: (params[:id] || params[:message_id])
+    @message = @current_user.all_messages.includes(message: [{ message_participants: :user }]).find_by! message_id: (params[:id] || params[:message_id])
   end
 
   def index
     respond_to do |format|
       format.json do
+        @messages = @messages.as_sender if params[:scope] == 'sent'
+        @messages = @messages.as_recipient if params[:scope] == 'inbox'
         render json: pagination_json(@messages, :messages_json, params[:include] || {}), status: :ok
       end
+      format.html
     end
   end
 
@@ -64,6 +67,15 @@ class MessagesController < ApplicationController
     else
       render json: @message.errors, status: :bad_request
     end
+  end
+
+  def search_recipients
+    @users = User.active
+    if params[:search_term]
+      t = params[:search_term]
+      @users = @users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ? AND id != ?', "%#{t}%", "%#{t}%", "%#{t}%", @current_user.id)
+    end
+    render json: @users.paginate(pagination_help).pluck(:id, :display_name).map { |u| { id: u[0], display_name: u[1] } }, status: :ok
   end
 
   private

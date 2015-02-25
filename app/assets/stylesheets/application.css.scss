@@ -19,4 +19,44 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 @import '../../../vendor/assets/stylesheets/_bootswatch.scss';
-@import 'font-awesome';
+
+.break-words {
+  word-break: break-all;
+}
+
+.scroll {
+  overflow-y: scroll;
+  height: 600px;
+}
+
+.ui-autocomplete {
+  z-index:1050 !important;
+}
+
+.ac-token {
+  background: #dee7fa;
+  color: #2B3E50;
+  border: 1px solid #85ace0;
+  border-radius: 14px;
+  box-sizing: border-box;
+  cursor: default;
+  display: inline-block;
+  line-height: normal;
+  margin: 2px 4px 2px 0;
+  overflow: hidden;
+  padding: 0 8px 0 8px;
+  position: relative;
+  vertical-align: middle;
+}
+
+ul[class*=ac-] {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ac-token-list {
+  display: inline;
+  position: relative;
+  z-index: 1050;
+}

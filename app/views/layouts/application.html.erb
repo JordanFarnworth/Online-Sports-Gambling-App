@@ -2,11 +2,18 @@
 <html>
 <head>
   <title>SportsB</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+
+  <script type="text/javascript">
+    ENV = {
+      current_user: <%= logged_in? ? @current_user.id : nil %>
+    };
+  </script>
 </head>
-<body>
+<body class="<%= params[:controller] %> <%= params[:action] %>">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -25,6 +32,13 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
+          <li><%= link_to messages_path do %>
+            Messages
+            <% count = @current_user.all_messages.unread.count %>
+            <% if count > 0 %>
+              <span class="badge"><%= count %></span>
+            <% end %>
+          <% end %></li>
           <li class="dropdown">
             <a type="button" data-toggle="dropdown" href="#">
               <%= @current_user.display_name %>

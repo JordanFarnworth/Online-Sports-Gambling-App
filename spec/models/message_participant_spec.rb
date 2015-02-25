@@ -38,4 +38,20 @@ RSpec.describe MessageParticipant, type: :model do
       expect(@message_participant.state).to eql 'read'
     end
   end
+
+  describe 'scoping' do
+    before :each do
+      message
+    end
+
+    it 'should return messages as a sender' do
+      expect(@user.all_messages.as_sender.map(&:message)).to include(@message)
+    end
+
+    it 'should return messages as a recipient' do
+      expect(@user.all_messages.as_recipient.map(&:message)).to_not include(@message)
+      u = @message.message_participants.where.not(user_id: @message.sender_id).first.user
+      expect(u.all_messages.as_recipient.map(&:message)).to include(@message)
+    end
+  end
 end

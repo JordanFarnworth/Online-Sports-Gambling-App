@@ -1,0 +1,61 @@
+<%= render partial: 'message_template' %>
+<%= render partial: 'recipient_template' %>
+<div class="row" style="margin-left: 5px;">
+  <div class="col-md-3">
+    <%= render partial: 'sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <ul class="nav nav-pills navbar-inverse" style="margin-bottom: 2px;">
+      <li><button class="btn btn-success" name="new-message"><i class="fa fa-pencil-square-o"></i></button></li>
+      <li><button class="btn btn-danger" name="delete-message"><i class="fa fa-times"></i></button></li>
+    </ul>
+    <div id="message_pane">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" name="new-message-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Message</h4>
+      </div>
+      <div class="modal-body">
+        <%= bootstrap_form_tag url: '#' do |f| %>
+          <div class="form-group">
+            <label class="control-label" for="recipients">Recipients</label>
+            <div class="input-box" for="recipients">
+              <ul class="ac-token-list"></ul>
+
+            </div>
+            <input class="form-control ui-autocomplete-input" name="recipients" id="recipients" type="search" autocomplete="off">
+          </div>
+          <%= f.text_field :subject %>
+          <%= f.text_area :message, rows: 8 %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info" name="clear-message-modal">Clear</button>
+        <button type="button" class="btn btn-primary" name="create-message">Send Message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" name="message-success-modal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        Hooray!
+      </div>
+      <div class="modal-body">
+        Your message has been sent!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

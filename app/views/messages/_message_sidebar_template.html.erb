@@ -1,0 +1,16 @@
+<script type="javascript/x-handlebars-template" id="message_sidebar_template">
+  <div class="list-group" style="margin-bottom: 2px;">
+    <a href="#" class="list-group-item message-listing" data-id="{{id}}" data-subject="{{subject}}" data-body="{{body}}"
+       data-sender="{{sender}}" data-created-at="{{created_at}}" data-recipients="{{recipients}}" data-is-sender="{{is_sender}}" data-unread="{{unread}}">
+      {{#if unread}}<i class="fa fa-circle" name="unread-marker"></i>{{/if}}
+      <h4 class="list-group-item-heading" style="display: inline-block;">{{subject}}</h4>
+      {{#if is_sender}}
+        <h4 class="list-group-item-heading">{{truncated_recipients}}</h4>
+      {{else}}
+        <h4 class="list-group-item-heading">{{sender}}</h4>
+      {{/if}}
+      <p class="list-group-item-text break-words">{{preview}}</p>
+      <p class="list-group-item-text text-inverse">{{created_at}}</p>
+    </a>
+  </div>
+</script>

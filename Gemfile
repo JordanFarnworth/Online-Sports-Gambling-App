@@ -65,3 +65,4 @@ gem 'bootstrap_form'
 gem 'daemons'
 gem 'jquery-ui-rails'
 
+gem 'simplecov', :require => false, :group => :test

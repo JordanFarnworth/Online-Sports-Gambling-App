@@ -27,13 +27,17 @@ class Message < ActiveRecord::Base
   end
 
   after_create do
-    unless users.where(id: sender_id).exists?
-      message_participants.create user: sender
+    unless message_participants.where(user_id: sender_id, user_type: :sender).exists?
+      message_participants.create user: sender, state: :read, user_type: :sender
     end
   end
 
-  def participants
-    message_participants.pluck(:user_id)
+  def participants(with_sender = false)
+    mp = message_participants.map { |m| { user_id: m.user_id, display_name: m.user.display_name } }
+    unless with_sender
+      mp.reject! { |m| m[:user_id] == sender_id }
+    end
+    mp
   end
 
   def active?

@@ -15,6 +15,7 @@ class Ability
       end
       can :read, Message
       can :create, Message
+      can :search_recipients, Message
 
       # Group permissions
       can :manage, Group

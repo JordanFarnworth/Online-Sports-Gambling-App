@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   end
 
   def all_messages
-    message_participants.includes(:message).order(:created_at)
+    message_participants.includes(:message).order(created_at: :desc)
   end
 
   def active?
