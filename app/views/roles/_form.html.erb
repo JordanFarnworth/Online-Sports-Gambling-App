@@ -1,0 +1,27 @@
+<%= bootstrap_form_for @role, layout: :horizontal, label_col: 'col-sm-2', control_col: 'col-sm-8' do |g| %>
+  <%= g.text_field :name %>
+  <div class="col-sm-8 col-sm-offset-2">
+    <div class="row">
+      <% Role::PERMISSION_TYPES.map { |a| a[:component] }.uniq.each do |p| %>
+        <div class="panel panel-default horizontal-form-margin">
+          <div class="panel-heading"><%= p.capitalize %></div>
+          <div class="panel-body">
+            <div class="row">
+              <% Role::PERMISSION_TYPES.select { |a| a[:component] == p }.each do |n| %>
+                <div class="col-sm-4">
+                  <span data-toggle="tooltip" data-placement="top" title="<%= n[:description] %>">
+                    <%= check_box_tag "permissions[#{n[:name]}]", 1, @role.permissions[n[:name]] %>
+                    <label for="permissions_<%= n[:name] %>"><%= n[:name].to_s.titleize %></label>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-sm-offset-2 col-sm-4" style="padding-left: 5px;">
+    <%= g.primary %>
+  </div>
+<% end %>

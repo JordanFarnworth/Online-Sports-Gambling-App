@@ -1,0 +1,17 @@
+<% Role::PERMISSION_TYPES.map { |a| a[:component] }.uniq.each do |p| %>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%= p.capitalize %></div>
+    <div class="panel-body">
+      <div class="row">
+        <% Role::PERMISSION_TYPES.select { |a| a[:component] == p }.each do |n| %>
+          <div class="col-sm-4">
+            <span data-toggle="tooltip" data-placement="top" title="<%= n[:description] %>">
+              <i class="fa fa-<%= @role.permissions[n[:name].to_sym] ? 'check checked' : 'times times' %>"></i>
+              <label><%= n[:name].to_s.titleize %></label>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

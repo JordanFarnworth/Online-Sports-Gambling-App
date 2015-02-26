@@ -33,6 +33,11 @@ class User < ActiveRecord::Base
   def destroy
     self.state = 'deleted'
     group_memberships.destroy_all
+    role_memberships.destroy_all
     save
+  end
+
+  def has_permission?(perm)
+    roles.any? { |r| r.permissions[perm] }
   end
 end

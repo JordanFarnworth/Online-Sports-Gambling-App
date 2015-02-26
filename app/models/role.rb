@@ -9,10 +9,21 @@ class Role < ActiveRecord::Base
 
   scope :active, -> { where(state: :active) }
 
+  PERMISSION_TYPES = [
+    { name: :manage_roles, component: :roles, description: 'Allows a user to create/edit/delete roles' },
+    { name: :assign_roles, component: :roles, description: 'Allows a user to assign users to roles' }
+  ]
+
   after_initialize do
-    RolesHelper.permissions.each do |k, v|
-      permissions[k] ||= false
+    Role::PERMISSION_TYPES.each do |k, v|
+      permissions[k[:name]] ||= false
     end
+    if protection_type == 'administrator'
+      permissions.each do |k, v|
+        permissions[k] = true
+      end
+    end
+    permissions.symbolize_keys!
   end
 
   before_validation do

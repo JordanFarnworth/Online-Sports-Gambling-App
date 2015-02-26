@@ -1,4 +1,5 @@
 module Api::V1::User
+  include Api::V1::Json
 
   def user_json(user, includes = {})
     attributes = %w(id display_name username email created_at state)
