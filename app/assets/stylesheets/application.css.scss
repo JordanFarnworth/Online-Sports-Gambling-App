@@ -60,3 +60,7 @@ ul[class*=ac-] {
   position: relative;
   z-index: 1050;
 }
+
+.list-group-item.active a {
+  color: #ffffff;
+}
