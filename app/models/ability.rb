@@ -1,6 +1,7 @@
 class Ability
   include CanCan::Ability
 
+  # If you add a line to this file, make a spec for it in spec/models/ability_spec.rb
   def initialize(user)
     user ||= User.new
 
@@ -10,9 +11,7 @@ class Ability
       can :update, User, id: user.id
 
       # Messaging permissions
-      can [:read, :destroy, :update], MessageParticipant do |msg|
-        msg.user == user
-      end
+      can [:read, :destroy, :update], MessageParticipant, user_id: user.id
       can :read, Message
       can :create, Message
       can :search_recipients, Message

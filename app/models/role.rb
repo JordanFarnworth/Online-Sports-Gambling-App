@@ -2,7 +2,7 @@ class Role < ActiveRecord::Base
   has_many :role_memberships, -> { active }
   has_many :users, -> { active }, through: :role_memberships
 
-  validates_presence_of :name
+  validates :name, uniqueness: true, presence: true
   validates_inclusion_of :state, in: %w(active), if: :protected?
 
   serialize :permissions, Hash
@@ -24,6 +24,7 @@ class Role < ActiveRecord::Base
       end
     end
     permissions.symbolize_keys!
+    permissions.transform_values! { |x| ['1', 1, 't', true].include?(x) }
   end
 
   before_validation do

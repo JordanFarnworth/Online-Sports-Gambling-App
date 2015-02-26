@@ -1,6 +1,7 @@
 class RolesController < ApplicationController
   include PaginationHelper
   include Api::V1::User
+  include Api::V1::Role
 
   before_action :find_role, only: [:show, :edit, :update, :destroy, :users]
   before_action :find_roles, only: [:index, :show]
@@ -12,6 +13,15 @@ class RolesController < ApplicationController
 
   def find_roles
     @roles = Role.active
+  end
+
+  def index
+    respond_to do |format|
+      format.json do
+        render json: pagination_json(@roles, :roles_json), status: :ok
+      end
+      format.html
+    end
   end
 
   def create
@@ -26,8 +36,8 @@ class RolesController < ApplicationController
         end
       end
       format.json do
-        if @group.save
-          render json: @role, status: :ok
+        if @role.save
+          render json: role_json(@role), status: :ok
         else
           render json: { errors: @role.errors.full_messages }, status: :bad_request
         end
@@ -48,7 +58,7 @@ class RolesController < ApplicationController
       end
       format.json do
         if @role.update role_params
-          render json: @role, status: :ok
+          render json: role_json(@role), status: :ok
         else
           render json: { errors: @role.errors.full_messages }, status: :bad_request
         end

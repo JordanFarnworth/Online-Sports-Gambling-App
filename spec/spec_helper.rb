@@ -122,7 +122,7 @@ end
 alias :user_with_group :group_with_user
 
 def logged_in_user(opts = {})
-  user opts
+  user_with_role opts
   login_session
   request.cookies['sports_b_key'] = @key
 end
@@ -147,6 +147,17 @@ end
 def role(opts = {})
   opts[:name] ||= SecureRandom.uuid
   @role = Role.create name: opts[:name], protection_type: opts[:protection_type]
+  if opts[:permissions] == :all
+    Role::PERMISSION_TYPES.each do |g|
+      @role.permissions[g[:name]] = true
+    end
+  elsif opts[:permissions]
+    opts[:permissions] = [opts[:permissions]] unless opts[:permissions].is_a?(Array)
+    opts[:permissions].each do |g|
+      @role.permissions[g] = true
+    end
+  end
+  @role.save
 end
 
 def user_with_role(opts = {})
