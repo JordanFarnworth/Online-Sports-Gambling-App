@@ -10,6 +10,8 @@ class Ability
       can :read, User
       can :update, User, id: user.id
 
+      can [:destroy, :create], User # Remove when users become more granular
+
       # Messaging permissions
       can [:read, :destroy, :update], MessageParticipant, user_id: user.id
       can :read, Message

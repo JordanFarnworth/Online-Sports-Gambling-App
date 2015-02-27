@@ -15,4 +15,15 @@ RSpec.describe RoleMembership, type: :model do
       expect(rp.save).to be_falsey
     end
   end
+
+  describe 'deletion' do
+    before :each do
+      user_with_role
+    end
+
+    it 'should mark a role membership as deleted' do
+      @role_membership.destroy
+      expect(@role_membership.state).to eql 'deleted'
+    end
+  end
 end

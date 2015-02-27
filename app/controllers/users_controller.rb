@@ -40,15 +40,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def group_memberships
-    groups = @user.group_memberships.includes(:group)
-    respond_to do |format|
-      format.json do
-        render json: groups.map { |g| g.as_json.merge({ group: g.group }) }, status: :ok
-      end
-    end
-  end
-
   def destroy
     @user.destroy
     respond_to do |format|
@@ -63,10 +54,6 @@ class UsersController < ApplicationController
   end
 
   private
-  def flash_message(method = 'update')
-    flash[:success] = "New User <a class=\"link-color\" href=#{user_path(@user)}>#{@user.display_name}</a> #{method == 'update' ? 'updated' : 'created'}!".html_safe
-  end
-
   def user_params
     params.require(:user).permit(:display_name, :username, :email, :password, :password_confirmation)
   end
