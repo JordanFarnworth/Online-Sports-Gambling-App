@@ -31,4 +31,16 @@ RSpec.describe ApiKey, :type => :model do
       end
     end
   end
+
+  describe 'expiration' do
+    before :each do
+      user
+      api_key
+    end
+
+    it 'should expire an API key when being deleted' do
+      @api_key.destroy
+      expect(@api_key.expired?).to be_truthy
+    end
+  end
 end

@@ -65,6 +65,11 @@ RSpec.describe MessagesController, type: :controller do
       post :create, format: :json, message: { subject: 'asdf', body: 'asdf', message_participants_attributes: [ { user_id: u.id } ] }
       expect(response.status).to eql 200
     end
+
+    it 'should return an error upon failure' do
+      post :create, format: :json, message: { subject: 'asdf', body: 'asdf', message_participants_attributes: [ { user_id: @user.id } ] }
+      expect(response.status).to eql 400
+    end
   end
 
   describe 'DELETE destroy' do
@@ -90,6 +95,27 @@ RSpec.describe MessagesController, type: :controller do
       json = JSON.parse(response.body)
       expect(response.status).to eql 200
       expect(json['state']).to eql 'read'
+    end
+
+    it 'should return an error upon failure' do
+      put :update, format: :json, id: @message.id, message: { state: 'not_a_real_state' }
+      expect(response.status).to eql 400
+    end
+  end
+
+  describe 'GET search_recipients' do
+    before :each do
+      logged_in_user
+    end
+
+    it 'should return users based on a search term' do
+      get :search_recipients, format: :json, search_term: @user.display_name
+      expect(response.status).to eql 200
+
+      json = JSON.parse(response.body)
+      expect(json.length).to eql 1
+      expect(json.map { |j| j['id'] }).to include(@user.id)
+      expect(json.map { |j| j['display_name'] }).to include(@user.display_name)
     end
   end
 end

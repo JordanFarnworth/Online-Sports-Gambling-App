@@ -1,5 +1,6 @@
 module Api::V1::Json
 
+  # :nocov:
   def api_json(obj, opts = {})
     json = obj.as_json(opts)
 
@@ -11,4 +12,5 @@ module Api::V1::Json
 
     json
   end
+  # :nocov:
 end

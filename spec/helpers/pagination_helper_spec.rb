@@ -43,4 +43,16 @@ RSpec.describe PaginationHelper, :type => :helper do
     end
   end
 
+  it 'should return pagination view options' do
+    opts = PaginationHelper.options_hash
+    expect(opts).to be_a(Hash)
+  end
+
+  it 'should return pagination view options for larger views' do
+    opts = PaginationHelper.options_hash
+    wide = PaginationHelper.wide_options_hash
+    expect(wide[:inner_window]).to be > opts[:inner_window]
+    expect(wide[:outer_window]).to be > opts[:outer_window]
+  end
+
 end
