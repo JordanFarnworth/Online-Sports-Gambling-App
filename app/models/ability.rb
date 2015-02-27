@@ -20,8 +20,15 @@ class Ability
       can :manage, Group
 
       # Role permissions
-      can :read, Role if user.has_permission?(:manage_roles) || user.has_permission?(:assign_roles)
-      can(:manage, Role) { |r| !r.protected? } if user.has_permission?(:manage_roles)
+      if user.has_permission? :manage_roles
+        can :read, Role
+        can(:manage, Role) { |r| !r.protected? }
+      end
+      if user.has_permission? :assign_roles
+        can :read, Role
+        can :read, User
+        can :manage, RoleMembership
+      end
     end
   end
 end

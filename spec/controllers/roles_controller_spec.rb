@@ -83,7 +83,7 @@ RSpec.describe RolesController, :type => :controller do
     it 'should return users in a role' do
       get :users, role_id: @role.id, format: :json
       json = JSON.parse(response.body)
-      expect(json['results'].map { |a| a['id'] }).to eql @role.users.map(&:id)
+      expect(json['results'].map { |a| a['user']['id'] }).to eql @role.users.map(&:id)
     end
   end
 end
