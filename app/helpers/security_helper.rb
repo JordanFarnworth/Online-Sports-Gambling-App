@@ -16,10 +16,6 @@ module SecurityHelper
     d.to_s
   end
 
-  def self.get_attachment_key
-    SecureRandom.urlsafe_base64 60
-  end
-
   def self.get_api_key
     SecureRandom.urlsafe_base64 60
   end

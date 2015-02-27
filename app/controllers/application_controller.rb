@@ -58,18 +58,6 @@ class ApplicationController < ActionController::Base
     !!@current_user
   end
 
-  def render_unauthorized
-    respond_to do |format|
-      format.html do
-        flash[:error] = 'Oops, you\'re not authorized to perform that action'
-        redirect_to :root
-      end
-      format.json do
-        render json: { 'message' => 'Oops, looks like you\'re not authorized to perform that action' }, status: 401
-      end
-    end
-  end
-
   def cookie_type
     Rails.env == 'production' ? cookies.encrypted : cookies
   end

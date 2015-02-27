@@ -95,9 +95,6 @@ class RolesController < ApplicationController
       format.json do
         render json: pagination_json(@rms, :role_memberships_json), status: :ok
       end
-      format.html do
-        @users = @users.paginate pagination_help
-      end
     end
   end
 
