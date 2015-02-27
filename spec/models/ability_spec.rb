@@ -111,6 +111,10 @@ RSpec.describe Ability, type: :model do
       it 'should not be able to manage roles' do
         expect(@ability.can?(:manage, Role)).to be_falsey
       end
+
+      it 'should be able to read users' do
+        expect(@ability.can?(:read, User)).to be_truthy
+      end
     end
   end
 end
