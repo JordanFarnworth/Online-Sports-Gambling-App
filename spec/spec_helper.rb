@@ -166,3 +166,10 @@ def user_with_role(opts = {})
   @role_membership = @role.add_user @user
 end
 alias :role_with_user :user_with_role
+
+def transaction(opts = {})
+  user unless @user
+  opts[:transaction_type] ||= 'payment'
+  opts[:amount] ||= 0.01
+  @transaction = @user.transactions.create transaction_type: opts[:transaction_type], amount: opts[:amount]
+end

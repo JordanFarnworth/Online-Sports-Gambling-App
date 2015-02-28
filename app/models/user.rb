@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :messages, -> { active }, through: :message_participants
   has_many :role_memberships, -> { active }
   has_many :roles, -> { active }, through: :role_memberships
+  has_many :transactions
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
@@ -39,5 +40,9 @@ class User < ActiveRecord::Base
 
   def has_permission?(perm)
     roles.any? { |r| r.permissions[perm] }
+  end
+
+  def update_balance
+    self.update balance: transactions.active.sum(:amount).round(2)
   end
 end

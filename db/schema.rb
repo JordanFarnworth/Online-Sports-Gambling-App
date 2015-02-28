@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225181400) do
+ActiveRecord::Schema.define(version: 20150227212254) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -98,14 +98,26 @@ ActiveRecord::Schema.define(version: 20150225181400) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "transaction_type"
+    t.decimal  "amount",           precision: 6, scale: 2
+    t.string   "state"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id"
+
   create_table "users", force: :cascade do |t|
     t.string   "display_name"
     t.string   "username"
     t.string   "email"
     t.string   "password_digest"
     t.string   "state"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.decimal  "balance",         precision: 8, scale: 2
   end
 
 end
