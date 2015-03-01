@@ -1,5 +1,6 @@
-class Transaction < ActiveRecord::Base
+class MonetaryTransaction < ActiveRecord::Base
   belongs_to :user
+  has_one :payment
 
   validates_presence_of :user
   validates_inclusion_of :state, in: %w(active cancelled)
@@ -19,5 +20,9 @@ class Transaction < ActiveRecord::Base
   def destroy
     self.state = :cancelled
     save
+  end
+
+  def linked_transaction
+    payment if transaction_type == 'payment'
   end
 end

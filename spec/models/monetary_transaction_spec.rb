@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Transaction, type: :model do
+RSpec.describe MonetaryTransaction, type: :model do
   describe 'validations' do
     before :each do
       transaction
@@ -55,5 +55,16 @@ RSpec.describe Transaction, type: :model do
     transaction
     @transaction.destroy
     expect(@transaction.state).to eql 'cancelled'
+  end
+
+  describe 'transaction linking' do
+    before :each do
+      transaction
+    end
+
+    it 'should link to a payment' do
+      payment transaction: @transaction
+      expect(@transaction.linked_transaction).to eql @payment
+    end
   end
 end

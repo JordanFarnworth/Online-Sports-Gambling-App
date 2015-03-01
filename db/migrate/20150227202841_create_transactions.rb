@@ -1,6 +1,6 @@
 class CreateTransactions < ActiveRecord::Migration
   def change
-    create_table :transactions do |t|
+    create_table :monetary_transactions do |t|
       t.references :user, index: true
       t.string :transaction_type
       t.decimal :amount, precision: 6, scale: 2
@@ -8,6 +8,6 @@ class CreateTransactions < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_foreign_key :transactions, :users
+    add_foreign_key :monetary_transactions, :users
   end
 end

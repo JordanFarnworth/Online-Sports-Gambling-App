@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227212254) do
+ActiveRecord::Schema.define(version: 20150301040403) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -78,6 +78,32 @@ ActiveRecord::Schema.define(version: 20150227212254) do
 
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
 
+  create_table "monetary_transactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "transaction_type"
+    t.decimal  "amount",           precision: 6, scale: 2
+    t.string   "state"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "monetary_transactions", ["user_id"], name: "index_monetary_transactions_on_user_id"
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "monetary_transaction_id"
+    t.integer  "user_id"
+    t.string   "uuid"
+    t.string   "gateway"
+    t.decimal  "amount",                  precision: 6, scale: 2
+    t.string   "state"
+    t.text     "parameters"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "payments", ["monetary_transaction_id"], name: "index_payments_on_monetary_transaction_id"
+  add_index "payments", ["user_id"], name: "index_payments_on_user_id"
+
   create_table "role_memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "role_id"
@@ -97,17 +123,6 @@ ActiveRecord::Schema.define(version: 20150227212254) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
-
-  create_table "transactions", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "transaction_type"
-    t.decimal  "amount",           precision: 6, scale: 2
-    t.string   "state"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-  end
-
-  add_index "transactions", ["user_id"], name: "index_transactions_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "display_name"
