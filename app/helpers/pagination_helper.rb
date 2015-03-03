@@ -1,7 +1,7 @@
 module PaginationHelper
 
   MAX_PER_PAGE = 100
-  DEFAULT_PER_PAGE = 3
+  DEFAULT_PER_PAGE = 50
 
   def pagination_help(p = self.params)
     {
