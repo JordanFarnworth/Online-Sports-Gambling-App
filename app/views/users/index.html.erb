@@ -1,4 +1,83 @@
-<%= @users.each do |u| %>
-  <p>u.display_name</p>
-  <p>u.email</p>
-<%= end %>
+
+<script type="javascript/x-handlebars-template" id="users_index_page">
+  <div class="no-bottom-margin list-group">
+    <a href="/users/{{id}}" class="list-group-item">
+      <h4 class="list-group-item-heading">{{display_name}}</h4>
+      <p class="list-group-item-text">{{created_at}}</p>
+    </a>
+  </div>
+</script>
+
+
+<h1 style="margin-left: 10%">Users Page</h1>
+<div class="row col-md-10 col-md-offset-1">
+    <div id="users_table" class="col-md-10">
+
+    </div>
+
+  <ul class="pagination" style="padding-left: 8px" id="users_pagination"></ul>
+</div>
+
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-left: 10%" >
+  New User
+</button>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" name="new-user-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create a User</h4>
+      </div>
+      <div class="modal-body">
+        <%= bootstrap_form_tag url: '#' do |u| %>
+
+            <%= u.text_field :display_name %>
+            <%= u.text_field :username %>
+            <%= u.text_field :email %>
+            <%= u.password_field :password %>
+
+        <% end %>
+        <form class="form-horizontal">
+          <!-- these don't do anything yet -->
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="admin-checkbox"> Admin
+              </label>
+            </div>
+            <div class="form-group">
+
+              <div id="admin-field">
+                  <div class="col-lg-10">
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                        Super Admin
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                        Admin Manager
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" name="clear-modal">Clear Modal</button>
+        <button type="button" class="btn btn-primary" name="create-user">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,48 @@
-<%= render layout: 'shared/margins' do %>
-  <%= @user.display_name %>
-<% end %>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1" style="text-align: center;">
+    <div class="panel panel-primary" name="user-information-panel">
+      <div class="panel-heading">
+        <div class="row">
+            <div class="panel-title"><h3>User Information</h3></div>
+          <%= link_to '<i class="fa fa-pencil-square-o fa-3"></i>'.html_safe, edit_user_path(@user), name: "edit-elm", style: "color: black; visibility: hidden;" if can?(:update, @user) %>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="row ">
+          <%= image_tag "bat.jpg", class: 'img-rounded', style: "width:200px; height:150px;" %>
+        </div>
+        <div class="row col-md-offset-1">
+            <span class="col-md-3"><h3><%= @user.display_name %></h3></span>
+            <span class="col-md-3"><h3><%= @user.username %></h3></span>
+            <span class="col-md-3"><h3><%= @user.email %></h3></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1" style="text-align: center;">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h2 class="panel-title">Payment Information</h2>
+      </div>
+      <div class="panel-body">
+        Payment info Here
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1" style="text-align: center;">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h2 class="panel-title">Group Information</h2>
+      </div>
+      <div class="panel-body">
+        Group Info Here
+      </div>
+    </div>
+  </div>
+</div>

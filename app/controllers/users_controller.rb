@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-
+  include Api::V1::User
   include PaginationHelper
 
   before_action :find_user, only: [:show, :edit, :update, :destroy]
@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @user = User.new
     @users = User.active
     if params[:search_term]
       t = params[:search_term]
@@ -15,11 +16,21 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.json do
+        sleep 1
         render json: pagination_json(@users), status: :ok
       end
       format.html do
         @users = @users.paginate pagination_help
       end
+    end
+  end
+
+  def update
+    if @user.update user_params
+      flash_message
+      redirect_to :users
+    else
+      render 'show'
     end
   end
 
@@ -33,10 +44,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new user_params
-    if @user.save
-      redirect_to @user
-    else
-      render 'new'
+    respond_to do |format|
+      format.html do
+        if @user.save
+          redirect_to @user
+        else
+          render 'new'
+        end
+      end
+      format.json do
+        if @user.save
+          render json: user_json(@user), status: :ok
+        else
+          render json: @user.errors, status: :bad_request
+        end
+      end
     end
   end
 
@@ -63,6 +85,7 @@ class UsersController < ApplicationController
   end
 
   private
+
   def flash_message(method = 'update')
     flash[:success] = "New User <a class=\"link-color\" href=#{user_path(@user)}>#{@user.display_name}</a> #{method == 'update' ? 'updated' : 'created'}!".html_safe
   end

@@ -8,9 +8,9 @@
   <%= csrf_meta_tags %>
 
   <script type="text/javascript">
-    ENV = {
-      current_user: <%= logged_in? ? @current_user.id : nil %>
-    };
+      ENV = {
+          current_user: <%= logged_in? ? @current_user.id : nil %>
+      };
   </script>
 </head>
 <body class="<%= params[:controller] %> <%= params[:action] %>">
@@ -57,7 +57,9 @@
   </div>
 </nav>
 
-<%= flash_messages %>
+<div class="container">
+  <%= flash_messages %>
+</div>
 <%= yield %>
 
 </body>
