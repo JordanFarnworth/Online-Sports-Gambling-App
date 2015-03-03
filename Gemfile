@@ -66,3 +66,5 @@ gem 'daemons'
 gem 'jquery-ui-rails'
 
 gem 'simplecov', :require => false, :group => :test
+
+gem 'pry-rails'
