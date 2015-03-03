@@ -1,0 +1,27 @@
+<script type="text/x-handlebars-template" id="role_users_template">
+  <div class="list-group-item">
+    <div class="row">
+      <div class="col-md-9">
+        <a href="/users/{{id}}">
+          <h4 class="list-group-item-heading">{{name}}</h4>
+        </a>
+        <p class="list-group-item-text">Added: {{date}}</p>
+      </div>
+      <div class="col-md-3">
+        {{#if can_assign_roles}}
+          <div class="pull-right dropdown">
+            <i class="fa fa-cog group-list-item dropdown-toggle" data-toggle="dropdown"></i>
+            <ul class="dropdown-menu navbar-inverse" role="menu">
+              <li>
+                <a href="#" name="remove-user-from-role" data-role-membership-id="{{membership_id}}">
+                  <i class="fa fa-trash-o"></i>
+                  Remove User
+                </a>
+              </li>
+            </ul>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</script>

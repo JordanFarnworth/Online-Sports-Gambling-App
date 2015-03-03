@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h4><%= @role.name %></h4>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <ul class="nav nav-pills">
+      <li role="presentation" class="<%= 'active' if params[:action] == 'show' %>">
+        <a href="#role_permissions" data-toggle="tab">Permissions</a>
+      </li>
+      <li role="presentation" class="<%= 'active' if params[:action] == 'users' %>">
+        <a href="#role_users" data-toggle="tab">Users</a>
+      </li>
+    </ul>
+  </div>
+</div>

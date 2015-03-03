@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
     resources :users
     resources :messages, only: :index
+    resources :roles
     get 'login' => 'login#index'
     post 'login' => 'login#verify'
     delete 'login' => 'login#logout'
@@ -20,6 +21,10 @@ Rails.application.routes.draw do
       resources :messages, except: [:new, :edit]
       resources :groups, except: [:new, :edit] do
         get 'users' => 'groups#users'
+      end
+      resources :roles, except: [:new, :edit] do
+        get 'users' => 'roles#users'
+        resources :role_memberships, only: [:create, :destroy]
       end
     end
   end

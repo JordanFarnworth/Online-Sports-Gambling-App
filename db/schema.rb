@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150223185124) do
+ActiveRecord::Schema.define(version: 20150225181400) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -77,6 +77,26 @@ ActiveRecord::Schema.define(version: 20150223185124) do
   end
 
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
+
+  create_table "role_memberships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.string   "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "role_memberships", ["role_id"], name: "index_role_memberships_on_role_id"
+  add_index "role_memberships", ["user_id"], name: "index_role_memberships_on_user_id"
+
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.text     "permissions"
+    t.string   "state"
+    t.string   "protection_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "display_name"

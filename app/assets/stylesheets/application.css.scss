@@ -62,3 +62,15 @@ ul[class*=ac-] {
   z-index: 1050;
 }
 
+.list-group-item.active a {
+  color: #ffffff;
+}
+
+.spacer {
+  margin-top: 60px;
+}
+
+.slight-margins {
+  margin-left: 10px;
+  margin-right: 10px;
+}
