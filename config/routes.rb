@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       end
       resources :roles, except: [:new, :edit] do
         get 'users' => 'roles#users'
+        resources :role_memberships, only: [:create, :destroy]
       end
     end
   end
