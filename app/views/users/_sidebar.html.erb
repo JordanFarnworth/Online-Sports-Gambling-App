@@ -1,0 +1,45 @@
+<div class="row well user-base-info">
+  <div class="col-md-3 ">
+    <%= image_tag "bat.jpg", class: 'img-rounded', style: "width:200px; height:150px;" %>
+    <span class="icon-inline">
+      <h3><%= @user.display_name %></h3>
+      <span class="pull-right edit-usr-info">
+        <a href="#" data-toggle="modal" data-target="#myUserModal">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </span>
+    </span>
+    <p><%= @user.username %></p>
+    <p><%= @user.email %></p>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary" >
+  Reset Password
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit User</h4>
+      </div>
+      <div class="modal-body">
+        <%= bootstrap_form_tag url: '#' do |u| %>
+
+            <%= u.text_field :display_name %>
+            <%= u.text_field :username %>
+            <%= u.text_field :email %>
+
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" name="clear-modal">Clear Modal</button>
+        <button type="button" class="btn btn-primary" name="update-user">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

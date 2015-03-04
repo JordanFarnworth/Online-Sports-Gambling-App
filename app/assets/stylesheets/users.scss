@@ -2,3 +2,23 @@
 // They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.panel-heading .edit-pane {
+  display: none;
+}
+
+.edit-usr-info {
+  display: none;
+}
+
+.user-base-info:hover {
+  .edit-usr-info {
+    display: inline-block;
+  }
+}
+
+.panel-heading:hover {
+
+  .edit-pane {
+    display: inline-block;
+  }
+}

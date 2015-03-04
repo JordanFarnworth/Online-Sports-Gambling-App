@@ -6,6 +6,7 @@ $('.users.index').ready ->
   loadUsers('#users_pagination')
   $('[name=clear-modal]').click clearModal
   $('[name=create-user]').click createUser
+  $('[name=update-user]').click updateUser
   $('[name=edit-elm').hide()
   $('[name=user-information-panel]').bind 'mouseover', ->
     $('[name=edit-elm').fadeIn()
@@ -13,7 +14,7 @@ $('.users.index').ready ->
 
 loadUsers = (pagination_selector, page = 1) ->
   $('#users_table').prepend($('<i class="fa fa-cog fa-spin fa-2x"></i>'))
-  $('#users_table li').remove()
+  $('#users_table .list-group').remove()
   $.ajax "/api/v1/users?page=#{page}",
     type: 'get'
     dataType: 'json'
@@ -63,3 +64,17 @@ createUser = (ev) ->
     error: (data) ->
       console.log(data.responseText)
       alert(data.username.join())
+
+
+updateUser = (ev) ->
+  user = window.location.pathname.match(/\/users\/(\d+)/)[1]
+  $.ajax "/api/v1/users/#{user}",
+    type: 'put'
+    dataType: 'json'
+    data:
+      user:
+        display_name: $('#display_name').val()
+        username: $('#username').val()
+        email: $('#email').val()
+    success: (data) ->
+      # remove textboxes and such
