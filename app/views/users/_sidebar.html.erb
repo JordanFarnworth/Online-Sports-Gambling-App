@@ -4,9 +4,11 @@
     <span class="icon-inline">
       <h3><%= @user.display_name %></h3>
       <span class="pull-right edit-usr-info">
-        <a href="#" data-toggle="modal" data-target="#myUserModal">
+        <%= link_to edit_user_path(@user) do %>
+        <!--<a href="#" data-toggle="modal" data-target="#myUserModal">-->
           <i class="fa fa-pencil"></i>
-        </a>
+        <% end %>
+        <!--</a>-->
       </span>
     </span>
     <p><%= @user.username %></p>

@@ -1,0 +1,7 @@
+<div class="col-md-3">
+    <%= bootstrap_form_for(@group)   do |g| %>
+        <%= g.text_field :name, label: 'Group Name' %>
+        <%= g.text_field :settings, label: 'Group Settings' %>
+        <%= g.submit :Submit, class: 'btn btn-primary' %>
+    <% end %>
+</div>

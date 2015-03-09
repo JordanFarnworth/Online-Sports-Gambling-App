@@ -9,6 +9,7 @@ class Group < ActiveRecord::Base
 
   scope :active, -> { where(state: :active) }
 
+
   validates :name, length: { minimum: 3 }
   validates_inclusion_of :state, in: %w(active deleted)
 
