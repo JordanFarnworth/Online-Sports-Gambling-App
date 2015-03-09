@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :messages, -> { active }, through: :message_participants
   has_many :role_memberships, -> { active }
   has_many :roles, -> { active }, through: :role_memberships
+  has_many :page_views
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }

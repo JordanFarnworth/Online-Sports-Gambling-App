@@ -22,6 +22,7 @@ class LoginController < ApplicationController
     ls = LoginSession.find_by key: SecurityHelper.sha_hash(cookie_type[:sports_b_key])
     ls.destroy if ls
     cookies.delete :sports_b_key
+    cookies.delete 'sports_b_masquerade_user'
     flash[:notice] = 'You have been logged out.'
     redirect_to :root
   end
