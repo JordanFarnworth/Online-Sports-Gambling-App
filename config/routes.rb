@@ -4,12 +4,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root to: 'dashboard#index'
-  resources :users
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
-    resources :groups do
-      resources :users
-    end
     resources :users, except: [:new]
     resources :messages, only: :index
     resources :roles

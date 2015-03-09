@@ -35,10 +35,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def find_groups
-    @user_groups = @current_user.groups
-  end
-
   def find_user
     @user = User.active.find params[:id]
   end

@@ -8,7 +8,9 @@ $('.users.index').ready ->
   $('[name=create-user]').click createUser
   $('[name=update-user]').click updateUser
   $('[name=edit-elm').hide()
-
+  $('[name=user-information-panel]').bind 'mouseover', ->
+    $('[name=edit-elm').fadeIn()
+    return
 
 loadUsers = (pagination_selector, page = 1) ->
   $('#users_table').prepend($('<i class="fa fa-cog fa-spin fa-2x"></i>'))

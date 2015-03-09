@@ -25,10 +25,6 @@ class GroupsController < ApplicationController
     end
   end
 
-  def edit
-    redirect_to 'show'
-  end
-
   def show
     respond_to do |format|
       format.json do
@@ -43,7 +39,7 @@ class GroupsController < ApplicationController
       format.html do
         if @group.save
           flash[:success] = 'Group created!'
-          redirect_to groups
+          redirect_to @group
         else
           render 'new'
         end
