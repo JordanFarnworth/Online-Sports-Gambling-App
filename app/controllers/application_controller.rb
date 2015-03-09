@@ -52,8 +52,10 @@ class ApplicationController < ActionController::Base
     @real_user = @current_user
     if logged_in? && (cookie_type['sports_b_masquerade_user'] || params['as_user_id'])
       masq_user = User.active.find_by_id cookie_type['sports_b_masquerade_user'] || params['as_user_id']
-      @current_user = masq_user if can?(:masquerade, masq_user)
-      @current_ability = Ability.new(@current_user)
+      if can?(:masquerade, masq_user)
+        @current_user = masq_user
+        @current_ability = Ability.new(@current_user)
+      end
     end
   end
 
