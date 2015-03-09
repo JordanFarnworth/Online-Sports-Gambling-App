@@ -48,7 +48,6 @@ RSpec.describe UsersController, :type => :controller do
     context 'html request' do
       it 'should redirect to users index upon success' do
         put :update, format: :html, id: @user.id, user: { display_name: 'asdf' }
-        puts response.body
         expect(response).to redirect_to(users_path)
       end
 
