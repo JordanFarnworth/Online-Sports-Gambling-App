@@ -11,22 +11,20 @@
 
 <h1 style="margin-left: 10%">Users Page</h1>
 <div class="row col-md-10 col-md-offset-1">
-    <div id="users_table" class="col-md-10">
+  <div id="users_table">
 
-    </div>
 
-  <ul class="pagination" style="padding-left: 8px" id="users_pagination">
+  </div>
+  <ul class="pagination" style="padding-left: 0px" id="users_pagination"></ul>
 
-  </ul>
+  <div>
+
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+      New User
+    </button>
+  </div>
+
 </div>
-
-
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-left: 10%" >
-  New User
-</button>
-
 
 
 <!-- Modal -->
@@ -46,34 +44,6 @@
             <%= u.password_field :password %>
 
         <% end %>
-        <form class="form-horizontal">
-          <!-- these don't do anything yet -->
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="admin-checkbox"> Admin
-              </label>
-            </div>
-            <div class="form-group">
-
-              <div id="admin-field">
-                  <div class="col-lg-10">
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                        Super Admin
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                        Admin Manager
-                      </label>
-                    </div>
-                  </div>
-                </div>
-            </div>
-          </fieldset>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

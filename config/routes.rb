@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :groups do
       resources :users
     end
+    resources :users, except: [:new]
     resources :messages, only: :index
     resources :roles
     get 'login' => 'login#index'
