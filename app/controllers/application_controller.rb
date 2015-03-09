@@ -48,7 +48,18 @@ class ApplicationController < ActionController::Base
     if cookie_type[:sports_b_key]
       @current_user ||= User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookie_type[:sports_b_key]), Time.now).first
     end
+    @real_user = @current_user
+    if logged_in? && cookie_type['sports_b_masquerade_user']
+      masq_user = User.active.find_by_id cookie_type['sports_b_masquerade_user']
+      @current_user = masq_user if can?(:masquerade, masq_user)
+    end
   end
+
+  # :nocov:
+  def masquerading?
+    @real_user != @current_user
+  end
+  # :nocov:
 
   def current_user
     @current_user
@@ -64,4 +75,5 @@ class ApplicationController < ActionController::Base
 
   private :set_current_user
   helper_method :logged_in?
+  helper_method :masquerading?
 end

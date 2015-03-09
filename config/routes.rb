@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
-    resources :users, except: [:new]
+    delete 'users/stop_masquerading'
+    resources :users, except: [:new] do
+      post 'masquerade'
+    end
     resources :messages, only: :index
     resources :roles
     get 'login' => 'login#index'
