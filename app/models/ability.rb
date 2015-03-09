@@ -9,7 +9,7 @@ class Ability
     unless user.new_record?
       can :create, User
       can :read, User
-      can :update, User, id: user.id
+      can :update, User#, id: user.id
 
       can [:destroy, :create], User # Remove when users become more granular
 

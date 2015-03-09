@@ -8,7 +8,6 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @user = User.new
     @users = User.active
     if params[:search_term]
       t = params[:search_term]
@@ -25,11 +24,14 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update user_params
-      flash_message
-      redirect_to :users
-    else
-      render 'show'
+    respond_to do |format|
+      format.html do
+        if @user.update user_params
+          redirect_to users_path
+        else
+          render 'edit'
+        end
+      end
     end
   end
 
@@ -55,7 +57,7 @@ class UsersController < ApplicationController
         if @user.save
           render json: user_json(@user), status: :ok
         else
-          render json: @user.errors, status: :bad_request
+          render json: { errors: @user.errors }, status: :bad_request
         end
       end
     end

@@ -8,9 +8,6 @@
   <%= csrf_meta_tags %>
 
   <script type="text/javascript">
-      ENV = {
-          current_user: <%= logged_in? ? @current_user.id : nil %>
-      };
     ENV = {
       current_user: <%= logged_in? ? @current_user.id : nil %>,
       permissions: {
