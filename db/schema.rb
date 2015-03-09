@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225181400) do
+ActiveRecord::Schema.define(version: 20150309171517) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -78,6 +78,51 @@ ActiveRecord::Schema.define(version: 20150225181400) do
 
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
 
+  create_table "monetary_transactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "transaction_type"
+    t.decimal  "amount",           precision: 6, scale: 2
+    t.string   "state"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "monetary_transactions", ["user_id"], name: "index_monetary_transactions_on_user_id"
+
+  create_table "page_views", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "real_user_id"
+    t.string   "path"
+    t.string   "ip_address"
+    t.string   "http_method"
+    t.text     "user_agent"
+    t.text     "parameters"
+    t.string   "referrer"
+    t.string   "request_format"
+    t.string   "controller"
+    t.string   "action"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "page_views", ["real_user_id"], name: "index_page_views_on_real_user_id"
+  add_index "page_views", ["user_id"], name: "index_page_views_on_user_id"
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "monetary_transaction_id"
+    t.integer  "user_id"
+    t.string   "uuid"
+    t.string   "gateway"
+    t.decimal  "amount",                  precision: 6, scale: 2
+    t.string   "state"
+    t.text     "parameters"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "payments", ["monetary_transaction_id"], name: "index_payments_on_monetary_transaction_id"
+  add_index "payments", ["user_id"], name: "index_payments_on_user_id"
+
   create_table "role_memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "role_id"
@@ -104,8 +149,9 @@ ActiveRecord::Schema.define(version: 20150225181400) do
     t.string   "email"
     t.string   "password_digest"
     t.string   "state"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.decimal  "balance",         precision: 8, scale: 2
   end
 
 end
