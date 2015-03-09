@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
 
   scope '/', defaults: { format: :html }, constraints: { format: :html } do
-    resources :users
+    resources :users, except: [:new]
     resources :messages, only: :index
     resources :roles
     get 'login' => 'login#index'

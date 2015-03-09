@@ -166,3 +166,7 @@ def user_with_role(opts = {})
   @role_membership = @role.add_user @user
 end
 alias :role_with_user :user_with_role
+
+def parse_json(data)
+  JSON.parse data
+end

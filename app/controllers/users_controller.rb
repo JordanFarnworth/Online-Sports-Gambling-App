@@ -23,6 +23,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      format.html do
+        if @user.update user_params
+          redirect_to users_path
+        else
+          render 'edit'
+        end
+      end
+    end
+  end
+
   def find_user
     @user = User.active.find params[:id]
   end
@@ -33,10 +45,21 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new user_params
-    if @user.save
-      redirect_to @user
-    else
-      render 'new'
+    respond_to do |format|
+      format.html do
+        if @user.save
+          redirect_to @user
+        else
+          render 'new'
+        end
+      end
+      format.json do
+        if @user.save
+          render json: user_json(@user), status: :ok
+        else
+          render json: { errors: @user.errors }, status: :bad_request
+        end
+      end
     end
   end
 

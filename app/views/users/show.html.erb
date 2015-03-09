@@ -1,3 +1,35 @@
-<%= render layout: 'shared/margins' do %>
-  <%= @user.display_name %>
-<% end %>
+<div class="row">
+  <div class="col-md-3" style="margin-left: 70px">
+<%= render "sidebar" %>
+  </div>
+
+  <div class="col-md-8" style="text-align: center;">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span class="panel-title">Payment Information</span>
+        <span class="pull-right edit-pane">
+          <i class="fa fa-pencil"></i>
+        </span>
+      </div>
+      <div class="panel-body">
+        Payment info Here
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-8" style="text-align: center;">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span class="panel-title">Group Information</span>
+        <span class="pull-right edit-pane">
+          <i class="fa fa-pencil"></i>
+        </span>
+      </div>
+      <div class="panel-body">
+        Group Info Here
+      </div>
+    </div>
+  </div>
+
+</div>
