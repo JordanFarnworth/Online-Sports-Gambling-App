@@ -10,6 +10,7 @@ class Ability
       can :create, User
       can :read, User
       can :update, User#, id: user.id
+      can :manage, User
 
       can [:destroy, :create], User # Remove when users become more granular
 

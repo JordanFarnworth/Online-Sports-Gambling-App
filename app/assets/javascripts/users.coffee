@@ -6,9 +6,11 @@ $('.users.index').ready ->
   loadUsers('#users_pagination')
   $('[name=clear-modal]').click clearModal
   $('[name=create-user]').click createUser
-  $('[name=update-user]').click updateUser
   $('[name=edit-elm').hide()
 
+$('.users.show').ready ->
+  $('[name=update-user]').click updateUser
+  $('[name=clear-modal]').click clearModal
 
 loadUsers = (pagination_selector, page = 1) ->
   $('#users_table').prepend($('<i class="fa fa-cog fa-spin fa-2x"></i>'))
@@ -29,6 +31,7 @@ addUserToTable = (data) ->
 
 clearModal = (ev) ->
   clearModalContents() if confirm('Are you sure you want to clear all fields?')
+
 
 clearModalContents = () ->
   $('#display_name').val('')
@@ -75,4 +78,10 @@ updateUser = (ev) ->
         username: $('#username').val()
         email: $('#email').val()
     success: (data) ->
-      # remove textboxes and such
+      $('[name=update-user-modal]').modal('hide')
+
+addUserToGroup = (ev) ->
+  user = window.location.pathname.match(/\/users\/(\d+)/)[1]
+  $.ajax "/api/v1/users/#{user}/group_memberships",
+    type: 'post'
+

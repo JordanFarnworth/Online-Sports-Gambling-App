@@ -2,8 +2,9 @@ class UsersController < ApplicationController
   include Api::V1::User
   include PaginationHelper
 
-  before_action :find_user, only: [:show, :edit, :update, :destroy]
+  before_action :find_user, only: [:show, :edit, :update, :destroy, :group_memberships]
   before_action :find_users, only: [:index]
+  before_action :find_groups, only: :show
 
   load_and_authorize_resource
 
@@ -32,15 +33,29 @@ class UsersController < ApplicationController
           render 'edit'
         end
       end
+      format.json do
+        if @user.update user_js_params
+          render json: user_json(@user), status: :ok
+        end
+      end
     end
   end
 
   def find_groups
-    @user_groups = @current_user.groups
+    @groups = @user.groups
+  end
+
+  def group_memberships
+    groups = @user.group_memberships.includes(:group)
+    respond_to do |format|
+      format.json do
+        render json: groups.map { |g| g.as_json.merge({ group: g.group }) }, status: :ok
+      end
+    end
   end
 
   def find_user
-    @user = User.active.find params[:id]
+    @user = User.active.find params[:id]o
   end
 
   def find_users
@@ -83,5 +98,9 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:display_name, :username, :email, :password, :password_confirmation)
+  end
+
+  def user_js_params
+    params.require(:user).permit(:display_name, :username, :email)
   end
 end

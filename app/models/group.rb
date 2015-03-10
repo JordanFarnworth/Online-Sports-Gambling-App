@@ -17,6 +17,12 @@ class Group < ActiveRecord::Base
     self.state ||= :active
   end
 
+  def add_user(user)
+    rp = GroupMembership.find_or_create_by(group: self, user: user)
+    rp.update state: :active
+    rp
+  end
+
   def destroy
     self.state = :deleted
     group_memberships.destroy_all

@@ -40,16 +40,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel"><%= @user.display_name %> Groups</h4>
       </div>
       <div class="modal-body">
-      <% if @user_groups.nil? %>
-        <h2>Sorry, no groups yet</h2>
-      <% else %>
-        <% @user_groups.each do |g| %>
-          <%= g.name %>
+        <% @groups.each do |g| %>
+            <div class="list-group">
+              <%= link_to g, class: 'list-group-item' do %>
+                <h3 class="list-group-item-heading"><%= g.name %></h3>
+                <p class="list-group-item-text">
+                  <% g.users.each do |gu| %>
+                      <%= gu.display_name %>
+                  <% end %>
+                </p>
+              <% end %>
+            </div>
         <% end %>
-      <% end %>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -58,3 +63,4 @@
     </div>
   </div>
 </div>
+

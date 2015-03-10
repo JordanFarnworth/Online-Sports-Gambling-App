@@ -3,12 +3,9 @@
     <%= image_tag "bat.jpg", class: 'img-rounded', style: "width:200px; height:150px;" %>
     <span class="icon-inline">
       <h3><%= @user.display_name %></h3>
-      <span class="pull-right edit-usr-info">
-        <%= link_to edit_user_path(@user) do %>
-        <!--<a href="#" data-toggle="modal" data-target="#myUserModal">-->
+        <a href="#" data-toggle="modal" data-target="#myUserModal">
           <i class="fa fa-pencil"></i>
-        <% end %>
-        <!--</a>-->
+        </a>
       </span>
     </span>
     <p><%= @user.username %></p>
@@ -21,7 +18,7 @@
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" name="update-user-modal" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
