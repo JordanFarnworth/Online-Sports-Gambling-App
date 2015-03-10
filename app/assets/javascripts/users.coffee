@@ -11,6 +11,10 @@ $('.users.index').ready ->
 $('.users.show').ready ->
   $('[name=update-user]').click updateUser
   $('[name=clear-modal]').click clearModal
+  $('a[name=add-group-membership]').on 'click', (ev) ->
+    ev.preventDefault()
+    $('div[name=groups-list-div]').slideDown()
+  $('button[name=add-group-membership-confirm]').on 'click', addUserToGroup
 
 loadUsers = (pagination_selector, page = 1) ->
   $('#users_table').prepend($('<i class="fa fa-cog fa-spin fa-2x"></i>'))
@@ -81,7 +85,11 @@ updateUser = (ev) ->
       $('[name=update-user-modal]').modal('hide')
 
 addUserToGroup = (ev) ->
+  sel = $('select[name=groups-list] option:selected')
   user = window.location.pathname.match(/\/users\/(\d+)/)[1]
-  $.ajax "/api/v1/users/#{user}/group_memberships",
+  $.ajax "/api/v1/group_memberships",
     type: 'post'
-
+    dataType: 'json'
+    data: { group_membership: { user_id: user, group_id: sel.val() } }
+    success: (data, status) ->
+      console.log('success')

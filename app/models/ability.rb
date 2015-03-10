@@ -21,6 +21,8 @@ class Ability
       can :search_recipients, Message
 
       # Group permissions
+      can :create, Group
+      can :create, GroupMembership
       can :manage, Group
 
       # Role permissions

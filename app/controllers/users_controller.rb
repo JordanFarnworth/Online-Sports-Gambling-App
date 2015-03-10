@@ -42,7 +42,8 @@ class UsersController < ApplicationController
   end
 
   def find_groups
-    @groups = @user.groups
+    @user_groups = @user.groups
+    @groups = Group.all
   end
 
   def group_memberships
@@ -55,7 +56,7 @@ class UsersController < ApplicationController
   end
 
   def find_user
-    @user = User.active.find params[:id]o
+    @user = User.active.find params[:user_id] || params[:id]
   end
 
   def find_users
