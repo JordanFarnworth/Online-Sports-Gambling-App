@@ -1,15 +1,21 @@
+<script type="text/x-handlebars-template" id="users_show_page">
+  <span class="icon-inline">
+    <a href="#" data-toggle="modal" data-target="#myUserModal">
+      <i class="fa fa-pencil"></i>
+    </a>
+  </span>
+  <h3>
+    {{display_name}}
+  </h3>
+  <p>{{username}}</p>
+  <p>{{email}}</p>
+</script>
+
 <div class="row well user-base-info">
   <div class="col-md-3 ">
-    <%= image_tag "bat.jpg", class: 'img-rounded', style: "width:200px; height:150px;" %>
-    <span class="icon-inline">
-      <h3><%= @user.display_name %></h3>
-        <a href="#" data-toggle="modal" data-target="#myUserModal">
-          <i class="fa fa-pencil"></i>
-        </a>
-      </span>
-    </span>
-    <p><%= @user.username %></p>
-    <p><%= @user.email %></p>
+    <%= image_tag "bat.jpg", style: "width:200px; height:150px;" %>
+    <div class="users_show_page">>
+    </div>
   </div>
 </div>
 
@@ -36,8 +42,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning" name="clear-modal">Clear Modal</button>
-        <button type="button" class="btn btn-primary" name="update-user">Save changes</button>
+        <button type="button" class="btn btn-warning" id="clear-modal">Clear Modal</button>
+        <button type="button" class="btn btn-primary" id="update-user">Save changes</button>
       </div>
     </div>
   </div>

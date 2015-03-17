@@ -4,21 +4,23 @@
   <title>SportsB</title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <script type="text/javascript">
+      window.ENV = {
+          current_user: <%= logged_in? ? @current_user.id : nil %>,
+          permissions: {
+              <% if logged_in? %>
+              <% Role::PERMISSION_TYPES.each do |p| %>
+              <%= (p[:name].to_s + ': ' + @current_user.has_permission?(p[:name]).to_s) + ', ' %>
+              <% end %>
+              <% end %>
+          },
+          data: <%= local_assigns.to_s %>
+      };
+      console.log(window.ENV.data);
+  </script>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
-  <script type="text/javascript">
-    ENV = {
-      current_user: <%= logged_in? ? @current_user.id : nil %>,
-      permissions: {
-        <% if logged_in? %>
-          <% Role::PERMISSION_TYPES.each do |p| %>
-            <%= (p[:name].to_s + ': ' + @current_user.has_permission?(p[:name]).to_s) + ', ' %>
-          <% end %>
-        <% end %>
-      }
-    };
-  </script>
 </head>
 <body class="<%= params[:controller] %> <%= params[:action] %>">
 

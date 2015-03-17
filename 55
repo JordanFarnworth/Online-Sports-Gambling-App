@@ -24,16 +24,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
-    respond_to do |format|
-      format.json do
-        render json: user_json(@user), status: :ok
-      end
-      format.html do |format|
-      end
-    end
-  end
-
   def update
     respond_to do |format|
       format.html do

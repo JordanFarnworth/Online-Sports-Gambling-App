@@ -56,7 +56,7 @@
             </div>
         <% end %>
 
-        <h2>Add User to Group</h2>
+        <h2>Add <%= @user.display_name %> to Group</h2>
         <div name="groups-list-div" style="display: none;">
           <select name="groups-list" class="form-control" >
             <% @groups.each_with_index do |g, i| %>
