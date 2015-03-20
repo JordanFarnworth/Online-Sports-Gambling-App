@@ -14,6 +14,13 @@ class Ability
 
       can [:destroy, :create], User # Remove when users become more granular
 
+      can :masquerade, User do |u|
+        Role::PERMISSION_TYPES.all? do |g|
+          u.has_permission?(g[:name]) ? user.has_permission?(g[:name]) : true
+        end && u != user
+      end
+      cannot :masquerade, User unless user.has_permission?(:become_users)
+
       # Messaging permissions
       can [:read, :destroy, :update], MessageParticipant, user_id: user.id
       can :read, Message

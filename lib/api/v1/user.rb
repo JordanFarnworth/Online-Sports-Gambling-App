@@ -7,6 +7,7 @@ module Api::V1::User
     api_json(user, only: attributes)
   end
 
+
   def users_json(users, includes = {})
     users.map { |u| user_json(u, includes) }
   end

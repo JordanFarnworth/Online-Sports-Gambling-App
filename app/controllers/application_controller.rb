@@ -36,6 +36,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :set_current_user
+  before_action :log_page_view
 
   def set_current_user
     if api_request?
@@ -48,7 +49,21 @@ class ApplicationController < ActionController::Base
     if cookie_type[:sports_b_key]
       @current_user ||= User.active.joins("LEFT JOIN login_sessions AS l on l.user_id = users.id").where("l.key = ? AND l.expires_at > ?", SecurityHelper.sha_hash(cookie_type[:sports_b_key]), Time.now).first
     end
+    @real_user = @current_user
+    if logged_in? && (cookie_type['sports_b_masquerade_user'] || params['as_user_id'])
+      masq_user = User.active.find_by_id cookie_type['sports_b_masquerade_user'] || params['as_user_id']
+      if can?(:masquerade, masq_user)
+        @current_user = masq_user
+        @current_ability = Ability.new(@current_user)
+      end
+    end
   end
+
+  # :nocov:
+  def masquerading?
+    @real_user != @current_user
+  end
+  # :nocov:
 
   def current_user
     @current_user
@@ -62,6 +77,29 @@ class ApplicationController < ActionController::Base
     Rails.env == 'production' ? cookies.encrypted : cookies
   end
 
+  def log_page_view
+    f = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+    p = params.clone
+    p.delete :action
+    p.delete :controller
+    p.delete :authenticity_token
+    p = PageView.strip_files(p)
+    PageView.create({
+      user: @current_user,
+      real_user: @real_user,
+      path: request.path_info,
+      ip_address: request.remote_ip,
+      http_method: request.method,
+      user_agent: request.user_agent,
+      parameters: f.filter(p),
+      referrer: request.referer,
+      request_format: request.format.symbol.to_s,
+      controller: params[:controller],
+      action: params[:action]
+    })
+  end
+
   private :set_current_user
   helper_method :logged_in?
+  helper_method :masquerading?
 end

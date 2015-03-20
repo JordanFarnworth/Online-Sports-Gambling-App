@@ -18,6 +18,8 @@ class GroupMembershipsController < ApplicationController
     end
   end
 
+
+
   private
   def group_membership_params
     params.require(:group_membership).permit(:user_id, :group_id)

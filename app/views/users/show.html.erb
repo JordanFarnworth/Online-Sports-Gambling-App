@@ -1,9 +1,22 @@
+<script type="text/x-handlebars-template" id="user-groups-panel" >
+    <a href="/groups/{{id}}" class="list-group-item" style="text-align: center;">
+      <h2 class="list-group-item-heading">{{name}}</h2>
+      <p class="list-group-item-text">{{created_at}}</p>
+    </a>
+</script>
+
+<script type="text/javascript" id="user-groups-modal">
+
+</script>
+
 <div class="row">
-  <div class="col-md-3" style="margin-left: 70px">
+  <div class="col-md-10 col-md-offset-1">
 <%= render "sidebar" %>
   </div>
+</div>
 
-  <div class="col-md-8" >
+<div class="row">
+  <div class="col-md-5 col-sm-10 col-md-offset-1" >
     <div class="panel panel-primary">
       <div class="panel-heading">
         <span class="panel-title">Payment Information</span>
@@ -18,21 +31,28 @@
   </div>
 
 
-  <div class="col-md-8">
+  <div class="col-md-5 col-sm-10 user-group-panel" >
     <div class="panel panel-primary">
       <div class="panel-heading">
         <span class="panel-title">Group Information</span>
         <span class="pull-right edit-pane">
-          <i class="fa fa-pencil" data-toggle="modal" data-target="#myGroupEditModal"></i>
+          <i class="fa fa-plus" data-toggle="modal" data-target="#myGroupEditModal"></i>
         </span>
       </div>
-      <div class="panel-body">
-        Group Info Here
+      <div class="panel-body panel-body-groups" >
+
+      </div>
+
+      <div class="list-group">
+      </div>
+
+      <div class="panel-footer">
       </div>
     </div>
-  </div>
-
 </div>
+
+
+
 
 <!--Group Edit Modal -->
 <div class="modal fade" id="myGroupEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -43,19 +63,7 @@
         <h4 class="modal-title" id="myModalLabel"><%= @user.display_name %> Groups</h4>
       </div>
       <div class="modal-body">
-        <% @user_groups.each do |g| %>
-            <div class="list-group">
-              <%= link_to g, class: 'list-group-item' do %>
-                <h3 class="list-group-item-heading"><%= g.name %></h3>
-                <p class="list-group-item-text">
-                  <% g.users.each do |gu| %>
-                      <%= gu.display_name %>
-                  <% end %>
-                </p>
-              <% end %>
-            </div>
-        <% end %>
-
+      <div class="modal-body">
         <h2>Add <%= @user.display_name %> to Group</h2>
         <div name="groups-list-div" style="display: none;">
           <select name="groups-list" class="form-control" >

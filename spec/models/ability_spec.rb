@@ -76,6 +76,18 @@ RSpec.describe Ability, type: :model do
         expect(@ability.can?(p, Role)).to be_falsey
       end
     end
+
+    context 'Users' do
+      before :each do
+        @original_user = @user
+        user_with_role
+      end
+
+      it 'should not allow masquerading without the become users permission' do
+        ab = Ability.new @user
+        expect(ab.can?(:masquerade, @original_user)).to be_falsey
+      end
+    end
   end
 
   describe 'role permissions' do
@@ -115,6 +127,25 @@ RSpec.describe Ability, type: :model do
 
       it 'should be able to read users' do
         expect(@ability.can?(:read, User)).to be_truthy
+      end
+    end
+
+    context 'Users' do
+      before :each do
+        user_with_role permissions: :all
+        ability
+        @original_user = @user
+        @user2 = user
+      end
+
+      it 'should allow an admin to masquerade as another user' do
+        expect(@ability.can?(:masquerade, @user2)).to be_truthy
+      end
+
+      it 'should not allow an admin to masquerade as another user if the user has higher permissions' do
+        user_with_group permissions: [:become_users]
+        ab = Ability.new @user
+        expect(ab.can?(:masquerade, @original_user)).to be_falsey
       end
     end
   end

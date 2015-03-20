@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225181400) do
+ActiveRecord::Schema.define(version: 20150319040150) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -77,6 +77,25 @@ ActiveRecord::Schema.define(version: 20150225181400) do
   end
 
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
+
+  create_table "page_views", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "real_user_id"
+    t.string   "path"
+    t.string   "ip_address"
+    t.string   "http_method"
+    t.text     "user_agent"
+    t.text     "parameters"
+    t.string   "referrer"
+    t.string   "request_format"
+    t.string   "controller"
+    t.string   "action"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "page_views", ["real_user_id"], name: "index_page_views_on_real_user_id"
+  add_index "page_views", ["user_id"], name: "index_page_views_on_user_id"
 
   create_table "role_memberships", force: :cascade do |t|
     t.integer  "user_id"

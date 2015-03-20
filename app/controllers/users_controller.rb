@@ -1,8 +1,11 @@
 class UsersController < ApplicationController
   include Api::V1::User
+  include Api::V1::GroupMembership
   include PaginationHelper
+  skip_authorization_check only: [:stop_masquerading]
+  skip_load_and_authorize_resource only: [:stop_masquerading]
 
-  before_action :find_user, only: [:show, :edit, :update, :destroy, :group_memberships]
+  before_action :find_user, only: [:show, :edit, :update, :destroy, :masquerade, :group_memberships]
   before_action :find_users, only: [:index]
   before_action :find_groups, only: :show
 
@@ -34,6 +37,7 @@ class UsersController < ApplicationController
     end
   end
 
+
   def update
     respond_to do |format|
       format.html do
@@ -60,7 +64,7 @@ class UsersController < ApplicationController
     groups = @user.group_memberships.includes(:group)
     respond_to do |format|
       format.json do
-        render json: groups.map { |g| g.as_json.merge({ group: g.group }) }, status: :ok
+        render json: group_memberships_json(groups, params[:include] || []), status: :ok
       end
     end
   end
@@ -104,6 +108,17 @@ class UsersController < ApplicationController
         render nothing: true, status: :no_content
       end
     end
+  end
+
+  def masquerade
+    authorize! :masquerade, @user
+    cookie_type['sports_b_masquerade_user'] = @user.id
+    redirect_to request.referer || :root
+  end
+
+  def stop_masquerading
+    cookie_type.delete 'sports_b_masquerade_user'
+    redirect_to request.referer || :root
   end
 
   private

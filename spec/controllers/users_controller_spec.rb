@@ -112,4 +112,35 @@ RSpec.describe UsersController, :type => :controller do
       end
     end
   end
+
+  describe 'POST masquerade' do
+    before :each do
+      logged_in_user permissions: :all
+      @user = user
+      request.env['HTTP_REFERER'] = '/users/' + @user.id.to_s
+    end
+
+    context 'html request' do
+      it 'should allow a user to masquerade as another' do
+        post :masquerade, format: :html, user_id: @user.id
+        expect(response).to redirect_to(user_path(@user))
+        expect(response.cookies['sports_b_masquerade_user']).to eql @user.id.to_s
+      end
+    end
+  end
+
+  describe 'DELETE stop_masquerading' do
+    before :each do
+      logged_in_user permissions: :all
+      @user = user
+      request.cookies['sports_b_masquerade_user'] = @user.id
+      request.env['HTTP_REFERER'] = '/users/' + @user.id.to_s
+    end
+
+    it 'should allow a user to stop masquerading' do
+      delete :stop_masquerading, format: :html
+      expect(response).to redirect_to(user_path(@user))
+      expect(response.cookies['sports_b_masquerade_user']).to be_nil
+    end
+  end
 end

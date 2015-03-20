@@ -1,9 +1,40 @@
-<script type="text/x-handlebars-template" id="groups_index_page">
-  <a href="#">
-    <a href="/groups/{{id}}" class="list-group-item">{{name}}</a>
-  </a>
+<script type="text/x-handlebars-template" id="group-info-page" >
+
+  <h1>{{name}}</h1>
+  <p>{{created_at}}</p>
+
 </script>
 
-<ul class="list-group">
+<script type="text/x-handlebars-template" id="group-users-page" >
 
-</ul>
+  <h1>{{display_name}}</h1>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-bets-page" >
+
+  <h1>Bets</h1>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-stats-page" >
+
+  <h1>Stats</h1>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-settings-page" >
+
+  <h1>{{max_users}}</h1>
+
+</script>
+
+
+
+<div class="list-group" style="text-align: center;">
+  <a href="#" class="list-group-item group-show active"><i class="fa fa-home"></i></a>
+  <a href="#" class="list-group-item group-users-show"><i class="fa fa-users"></i></a>
+  <a href="#" class="list-group-item group-bets-show"><i class="fa fa-money"></i></a>
+  <a href="#" class="list-group-item group-stats-show"><i class="fa fa-bar-chart"></i></a>
+  <a href="#" class="list-group-item group-settings-show"><i class="fa fa-cogs"></i></a>
+</div>

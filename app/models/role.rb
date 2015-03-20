@@ -11,7 +11,8 @@ class Role < ActiveRecord::Base
 
   PERMISSION_TYPES = [
     { name: :manage_roles, component: :roles, description: 'Allows a user to create/edit/delete roles' },
-    { name: :assign_roles, component: :roles, description: 'Allows a user to assign users to roles' }
+    { name: :assign_roles, component: :roles, description: 'Allows a user to assign users to roles' },
+    { name: :become_users, component: :users, description: 'Allows a user to become another user, and see things as they would' }
   ]
 
   after_initialize do

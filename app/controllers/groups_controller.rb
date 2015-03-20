@@ -1,6 +1,8 @@
 class GroupsController < ApplicationController
 
   include PaginationHelper
+  include Api::V1::Group
+  include Api::V1::User
 
   before_action :find_group, only: [:users, :show, :edit, :update, :destroy]
   before_action :find_groups, only: [:index]
@@ -18,15 +20,10 @@ class GroupsController < ApplicationController
   def index
     respond_to do |format|
       format.json do
-        @groups = @groups
-        render json: pagination_json(@groups), status: :ok
+        render json: pagination_json(@groups, :groups_json), status: :ok
       end
       format.html
     end
-  end
-
-  def edit
-    redirect_to 'show'
   end
 
   def show
@@ -43,7 +40,7 @@ class GroupsController < ApplicationController
       format.html do
         if @group.save
           flash[:success] = 'Group created!'
-          redirect_to groups
+          redirect_to @group
         else
           render 'new'
         end
@@ -91,11 +88,10 @@ class GroupsController < ApplicationController
 
 
   def users
-    authorize! :read, @group
-    @users = @group.users.active
+    @users = @group.users
     respond_to do |format|
       format.json do
-        render json: pagination_json(@users), status: :ok
+        render json: pagination_json(@users, :users_json), status: :ok
       end
       format.html
     end

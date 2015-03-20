@@ -11,14 +11,21 @@ $('.users.index').ready ->
 
 $('.users.show').ready ->
   getUser()
+  getUserGroups()
   $('#update-user').click updateUser
   $('#clear-modal').click clearModal
   $('a[name=add-group-membership]').on 'click', (ev) ->
     ev.preventDefault()
     $('div[name=groups-list-div]').slideDown()
   $('button[name=add-group-membership-confirm]').on 'click', addUserToGroup
-
 # event handlers
+  $('[name=clear-modal]').click clearModal
+  $('[name=create-user]').click createUser
+  $('[name=update-user]').click updateUser
+  $('[name=edit-elm').hide()
+  $('[name=user-information-panel]').bind 'mouseover', ->
+    $('[name=edit-elm').fadeIn()
+    return
 
 loadUsers = (pagination_selector, page = 1) ->
   $('#users_table').prepend($('<i class="fa fa-cog fa-spin fa-2x"></i>'))
@@ -38,8 +45,30 @@ getUser = ->
     type: 'get'
     dataType: 'json'
     success: (data) ->
-      console.log(data.display_name)
       showUserInfo(data)
+      $('#display_name').val(data.display_name)
+      $('#username').val(data.username)
+      $('#email').val(data.email)
+
+getUserGroups = ->
+  user = window.location.pathname.match(/\/users\/(\d+)/)[1]
+  $.ajax "/api/v1/users/#{user}/group_memberships?include[]=group",
+    type: "get"
+    dataType: "json"
+    success: (data) ->
+      $.each data, ->
+        addGrouptotable(this.group)
+
+addGrouptotable = (data) ->
+  processData(data)
+  template = Handlebars.compile($('script#user-groups-panel').html())
+  temp = $(template(data))
+
+  modaltemplate = Handlebars.compile($('script#user-groups-modal').html())
+  modaltemp = $(modaltemplate(data))
+  $('div.row div.user-group-panel div.list-group').append(temp)
+
+
 
 addUserToTable = (data) ->
   template = Handlebars.compile($('script#users_index_page').html())
@@ -47,14 +76,6 @@ addUserToTable = (data) ->
   $('div.row div#users_table').append(temp)
 
 showUserInfo = (data) ->
-#  specific version:
-#  template = Handlebars.compile($('script#users_show_page').html())
-#  temp = $(template({ id: data.id,\
-#                      email: data.email,\
-#                      username: data.username,\
-#                      display_name: data.display_name,\
-#                      created_at: new Date(data.created_at).toLocaleDateString()}))
-#  $('div.row div.col-md-3 div.user-info').html(temp)
   processData(data)
   showTemplateForData("users_show_page", data)
 
@@ -122,7 +143,8 @@ updateUser = (ev) ->
     success: (data) ->
       $('[name=update-user-modal]').modal('hide')
       showUserInfo(data)
-      console.log("got this far")
+      if (data.id == ENV.current_user)
+        $('.logged-in-user').text(data.display_name)
 
 
 addUserToGroup = (ev) ->

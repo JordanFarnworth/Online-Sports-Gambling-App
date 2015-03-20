@@ -1,27 +1,34 @@
 <script type="text/x-handlebars-template" id="users_show_page">
-  <span class="icon-inline">
+
+  <div class="col-md-3">
+    <h1>{{display_name}}</h1>
+    <h4>{{username}}</h4>
+    <h4>{{email}}</h4>
+  </div>
+
+  <div class="col-md-3 col-md-offset-2">
+    <div class="circular ">
+    </div>
+  </div>
+
+  <span class="pull-right edit-usr-info">
     <a href="#" data-toggle="modal" data-target="#myUserModal">
       <i class="fa fa-pencil"></i>
     </a>
   </span>
-  <h3>
-    {{display_name}}
-  </h3>
-  <p>{{username}}</p>
-  <p>{{email}}</p>
 </script>
 
-<div class="row well user-base-info">
-  <div class="col-md-3 ">
-    <%= image_tag "bat.jpg", style: "width:200px; height:150px;" %>
-    <div class="users_show_page">>
+<div class="row user-base-info">
+  <div class="col-md-12 well ">
+    <div class="users_show_page">
     </div>
   </div>
 </div>
 
-<button type="button" class="btn btn-primary" >
-  Reset Password
-</button>
+
+<% if can?(:masquerade, @user) %>
+  <%= link_to 'Become', user_masquerade_path(@user), method: :post, class: 'btn btn-info' %>
+<% end %>
 
 <!-- Modal -->
 <div class="modal fade" name="update-user-modal" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -41,6 +48,7 @@
         <% end %>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-danger" >Reset Password</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-warning" id="clear-modal">Clear Modal</button>
         <button type="button" class="btn btn-primary" id="update-user">Save changes</button>
