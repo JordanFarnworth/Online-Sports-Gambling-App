@@ -2,12 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+
 $('.groups.index').ready ->
-  loadGroups('#groups_pagination')
 
 $('.groups.show').ready ->
-  loadGroup()
-  $('[data-toggle="tooltip"]').tooltip()
+  loadGroupMain()
   $(' div.list-group a.list-group-item').on 'click',  ->
     $('div.list-group a.active').removeClass('active')
     $(this).addClass('active')
@@ -20,33 +19,19 @@ $('.groups.show').ready ->
     $('div.row div.group-main-wrapper').find('*').remove()
     loadGroupUsers()
     # Group's betting
-  $('div.list-group a.group-bets-show').on 'click', ->
+  $('div.list-group a.group-lobbies-show').on 'click', ->
     $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupBets()
+    loadGroupLobbies()
     # Group's Stats
   $('div.list-group a.group-stats-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
+#    $('div.row div.group-main-wrapper').find('*').remove()
     loadGroupStats()
     # Group's Settings
   $('div.list-group a.group-settings-show').on 'click', ->
     $('div.row div.group-main-wrapper').find('*').remove()
     loadGroupSettings()
+  $('[data-toggle="tooltip"]').tooltip()
 
-
-loadGroups = (pagination_selector, page = 1) ->
-  $.ajax "/api/v1/groups?page=#{page}",
-    type: 'get'
-    dataType: 'json'
-    success: (data, status) ->
-      $.each data['results'], (i) ->
-        addGroupToList(this)
-
-loadGroup = ->
-  group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  $.ajax "/api/v1/groups/#{group}",
-    type: 'get'
-    dataType: 'json'
-    success: (data) ->
 
 loadGroupMain = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
@@ -62,10 +47,10 @@ loadGroupUsers = ->
     type: 'get'
     dataType: 'json'
     success: (data) ->
-      $.each data['results'], (u) ->
-        passUserData(this)
+      passUsersData(data)
 
-loadGroupBets = ->
+
+loadGroupLobbies = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   passBetsData()
 
@@ -82,42 +67,33 @@ loadGroupSettings = (data) ->
     dataType: 'json'
     success: (data) ->
       console.log(data.settings)
-      passSettingsData(data.settings)
+      passSettingsData(data)
 
+
+      # Creating Templates with data
 
 passData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
-  template = Handlebars.compile($('script#group-info-page').html())
-  temp = $(template(data))
-  $('div.row div.group-main-wrapper').html(temp)
+  render(data, "group-info-page")
 
-passUserData = (data) ->
-  data.created_at = new Date(data.created_at).toLocaleDateString()
-  template = Handlebars.compile($('script#group-users-page').html())
-  temp = $(template(data))
-  $('div.row div.group-main-wrapper').append(temp)
+passUsersData = (data) ->
+#  debugger
+#  $.each data['results'], (u) ->
+#    u.created_at = new Date(data.created_at).toLocaleDateString()
+  render(data, "group-users-page")
 
-passBetsData = ->
-  template = Handlebars.compile($('script#group-bets-page').html())
-  temp = $(template())
-  $('div.row div.group-main-wrapper').append(temp)
+passBetsData = (data) ->
+  render(data, "group-lobbies-page")
 
-passStatsData = ->
-  template = Handlebars.compile($('script#group-stats-page').html())
-  temp = $(template())
-  $('div.row div.group-main-wrapper').html(temp)
-
+passStatsData = (data) ->
+  render(data, "group-stats-page")
 
 passSettingsData = (data) ->
-  template = Handlebars.compile($('script#group-settings-page').html())
+  data.created_at = new Date(data.created_at).toLocaleDateString()
+  render(data, "group-settings-page")
+
+render = (data, id) ->
+  template = Handlebars.compile($('script#' + id).html())
   temp = $(template(data))
-  $('div.row div.group-main-wrapper').append(temp)
-
-
-
-
-addGroupToList = (data) ->
-  template = Handlebars.compile($('script#groups_index_page').html())
-  temp = $(template({ id: data.id, name: data.name, settings: data.settings, created_at: new Date(data.created_at).toLocaleDateString() }))
-  $('div.row div.col-md-3 ul.list-group').append(temp)
+  $('div.row div.group-main-wrapper').html(temp)
 

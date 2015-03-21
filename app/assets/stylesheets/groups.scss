@@ -3,5 +3,19 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .group-sidebar-show {
-  margin-left: 165px;
+  margin-left: 130px;
+  margin-right: 130px;
+}
+
+.inline {
+  display: inline;
+}
+.edit-group-settings {
+  margin-top: 8px;
+  display: none;
+}
+.group-name-well:hover {
+  .edit-group-settings {
+    display: inline-block;
+  }
 }

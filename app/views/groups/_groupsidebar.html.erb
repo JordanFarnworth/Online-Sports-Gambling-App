@@ -2,18 +2,21 @@
 
   <h1>{{name}}</h1>
   <p>{{created_at}}</p>
+  <p>{{settings.description}}</p>
 
 </script>
 
 <script type="text/x-handlebars-template" id="group-users-page" >
 
-  <h1>{{display_name}}</h1>
+  {{#each results}}
+  <p>{{display_name}}</p>
+  {{/each}}
 
 </script>
 
-<script type="text/x-handlebars-template" id="group-bets-page" >
+<script type="text/x-handlebars-template" id="group-lobbies-page" >
 
-  <h1>Bets</h1>
+  <h1>Lobbies</h1>
 
 </script>
 
@@ -24,17 +27,95 @@
 </script>
 
 <script type="text/x-handlebars-template" id="group-settings-page" >
+  <div class="well group-name-well">
+    <h1 class="inline">{{name}}'s Settings</h1>
+    <span class="inline edit-group-settings pull-right">
+      <a href="" data-toggle="modal" data-target="#myModal">
+        <i class="fa fa-pencil">
+        </i>
+      </a>
+    </span>
+  </div>
 
-  <h1>{{max_users}}</h1>
+  <h5>Name:</h5><p>{{name}}</p>
+  <h5>Created On:</h5><p>{{created_at}}</p>
+  <h5>Maximum amount of Users:</h5><p>{{settings.max_users}}</p>
+  <h5>Availability</h5><p>{{settings.availability}}</p>
+  <h5>Maximum amount of lobbies</h5><p>{{settings.max_lobbies}}</p>
+  <h5>Group Description:</h5><p>{{settings.description}}</p>
 
 </script>
 
 
 
 <div class="list-group" style="text-align: center;">
-  <a href="#" class="list-group-item group-show active"><i class="fa fa-home"></i></a>
+  <a href="#" class="list-group-item group-show active" data-toggle="tooltip" data-placement="left" title="" data-original-title="Tooltip on left"><i class="fa fa-home"></i></a>
   <a href="#" class="list-group-item group-users-show"><i class="fa fa-users"></i></a>
-  <a href="#" class="list-group-item group-bets-show"><i class="fa fa-money"></i></a>
+  <a href="#" class="list-group-item group-lobbies-show"><i class="fa fa-money"></i></a>
   <a href="#" class="list-group-item group-stats-show"><i class="fa fa-bar-chart"></i></a>
   <a href="#" class="list-group-item group-settings-show"><i class="fa fa-cogs"></i></a>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Group</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Name</label>
+              <div class="col-lg-10">
+                <input type="text" class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Created</label>
+              <div class="col-lg-10">
+                <input  class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Max&nbsp;Users</label>
+              <div class="col-lg-2">
+                <input  class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Lobbies</label>
+              <div class="col-lg-2">
+                <input  class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="textArea" class="col-lg-2 control-label">Description</label>
+              <div class="col-lg-10">
+                <textarea class="form-control" rows="3" id="textArea"></textarea>
+                <span class="help-block"><em>This will be the description that displays on your group home page</em></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="select" class="col-lg-2 control-label">Availability</label>
+              <div class="col-lg-10">
+                <select class="form-control" id="select">
+                  <option>Public</option>
+                  <option>Private</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
