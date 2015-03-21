@@ -135,7 +135,7 @@ RSpec.describe Ability, type: :model do
         user_with_role permissions: :all
         ability
         @original_user = @user
-        @user2 = user
+        @user2 = create :user
       end
 
       it 'should allow an admin to masquerade as another user' do
@@ -143,7 +143,7 @@ RSpec.describe Ability, type: :model do
       end
 
       it 'should not allow an admin to masquerade as another user if the user has higher permissions' do
-        user_with_group permissions: [:become_users]
+        user_with_role permissions: [:become_users]
         ab = Ability.new @user
         expect(ab.can?(:masquerade, @original_user)).to be_falsey
       end

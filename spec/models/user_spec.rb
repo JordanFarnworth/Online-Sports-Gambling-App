@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe 'creation' do
     before(:each) do
-      user
+      @user = create :user
     end
 
     it 'should check validations' do
