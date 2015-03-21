@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319040150) do
+ActiveRecord::Schema.define(version: 20150321214809) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -44,6 +44,18 @@ ActiveRecord::Schema.define(version: 20150319040150) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "lobbies", force: :cascade do |t|
+    t.integer  "group_id"
+    t.datetime "betting_begins_at"
+    t.datetime "betting_ends_at"
+    t.text     "settings"
+    t.string   "state"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "lobbies", ["group_id"], name: "index_lobbies_on_group_id"
 
   create_table "login_sessions", force: :cascade do |t|
     t.integer  "user_id"

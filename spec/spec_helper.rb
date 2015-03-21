@@ -18,7 +18,22 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'simplecov'
 require 'factory_girl'
-SimpleCov.start
+SimpleCov.start do
+  add_group 'Models', 'app/models'
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Jobs', 'app/jobs'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Long files' do |src|
+    src.lines.count > 100
+  end
+
+  add_filter '/config'
+  add_filter '/spec'
+  add_filter '/test'
+  add_filter '/lib/jobs'
+  add_filter { |src| src.lines.count <= 5 }
+end
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
