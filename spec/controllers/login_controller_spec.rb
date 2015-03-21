@@ -10,7 +10,7 @@ RSpec.describe LoginController, :type => :controller do
 
   describe 'POST index' do
     before :all do
-      user(password: 'abcd')
+      @user = create :user, password: 'abcd'
     end
 
     describe 'successful login' do
@@ -61,7 +61,7 @@ RSpec.describe LoginController, :type => :controller do
 
   describe 'DELETE index' do
     before(:all) do
-      user(password: 'abcd')
+      @user = create :user, password: 'abcd'
     end
 
     let(:params) do

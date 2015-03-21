@@ -32,7 +32,7 @@ RSpec.describe RolesController, :type => :controller do
       end
 
       it 'should show an error if validations fail' do
-        group
+        role
         post :create, format: :json, role: { name: @role.name }
         expect(response.status).to eql 400
       end
@@ -148,7 +148,8 @@ RSpec.describe RolesController, :type => :controller do
 
     it 'should recognize an API key' do
       user_with_role permissions: :all
-      api_key
+      @key = SecurityHelper.get_api_key
+      @api_key = create :api_key, user: @user, key: @key
 
       request.headers['Authorization'] = "Bearer #{@key}"
       get :index, format: :json

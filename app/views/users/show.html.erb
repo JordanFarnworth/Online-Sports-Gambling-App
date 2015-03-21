@@ -11,7 +11,7 @@
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-<%= render "sidebar" %>
+    <%= render "sidebar" %>
   </div>
 </div>
 
@@ -29,7 +29,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="col-md-5 col-sm-10 user-group-panel" >
     <div class="panel panel-primary">
@@ -49,6 +48,7 @@
       <div class="panel-footer">
       </div>
     </div>
+  </div>
 </div>
 
 
@@ -62,7 +62,6 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel"><%= @user.display_name %> Groups</h4>
       </div>
-      <div class="modal-body">
       <div class="modal-body">
         <h2>Add <%= @user.display_name %> to Group</h2>
         <div name="groups-list-div" style="display: none;">
@@ -87,4 +86,3 @@
     </div>
   </div>
 </div>
-

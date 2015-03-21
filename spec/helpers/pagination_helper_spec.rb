@@ -4,8 +4,8 @@ RSpec.describe PaginationHelper, :type => :helper do
   include PaginationHelper
   describe 'small number pagination' do
     before(:all) do
-      user
-      user
+      create :user
+      create :user
     end
 
     it 'should paginate results using given parameters' do
@@ -25,7 +25,7 @@ RSpec.describe PaginationHelper, :type => :helper do
     before(:all) do
       User.transaction do
         150.times do |i|
-          user
+          create :user
         end
       end
     end

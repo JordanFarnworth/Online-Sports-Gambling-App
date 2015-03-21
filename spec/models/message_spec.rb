@@ -14,7 +14,7 @@ RSpec.describe Message, type: :model do
     it 'should require a recipient' do
       m = Message.new subject: 'asdf', body: 'asdf', sender: @user
       expect(m.save).to be_falsey
-      m.message_participants.new user_id: user.id
+      m.message_participants.new user_id: create(:user).id
       expect(m.save).to be_truthy
     end
   end

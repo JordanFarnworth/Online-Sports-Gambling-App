@@ -4,8 +4,8 @@ RSpec.describe UsersController, :type => :controller do
   describe 'GET index' do
     before(:all) do
       User.update_all state: :deleted
-      @user1 = user
-      @user2 = user({ username: SecureRandom.uuid + 'blahblah' })
+      @user1 = create :user
+      @user2 = create :user, username: SecureRandom.uuid + 'blahblah'
     end
 
     before :each do
@@ -42,7 +42,7 @@ RSpec.describe UsersController, :type => :controller do
     before :each do
       logged_in_user permissions: :all
       @username = @user.username
-      @user = user
+      @user = create :user
     end
 
     context 'html request' do
@@ -116,7 +116,7 @@ RSpec.describe UsersController, :type => :controller do
   describe 'POST masquerade' do
     before :each do
       logged_in_user permissions: :all
-      @user = user
+      @user = create :user
       request.env['HTTP_REFERER'] = '/users/' + @user.id.to_s
     end
 
@@ -132,7 +132,7 @@ RSpec.describe UsersController, :type => :controller do
   describe 'DELETE stop_masquerading' do
     before :each do
       logged_in_user permissions: :all
-      @user = user
+      @user = create :user
       request.cookies['sports_b_masquerade_user'] = @user.id
       request.env['HTTP_REFERER'] = '/users/' + @user.id.to_s
     end

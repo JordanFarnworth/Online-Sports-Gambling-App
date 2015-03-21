@@ -25,7 +25,6 @@
   </div>
 </div>
 
-
 <% if can?(:masquerade, @user) %>
   <%= link_to 'Become', user_masquerade_path(@user), method: :post, class: 'btn btn-info' %>
 <% end %>

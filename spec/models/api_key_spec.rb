@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ApiKey, :type => :model do
   describe 'creation' do
     before(:each) do
-      user
+      @user = create :user
     end
 
     it 'should be linked to a user' do
@@ -15,7 +15,8 @@ RSpec.describe ApiKey, :type => :model do
 
     describe 'existing key' do
       before(:each) do
-        api_key
+        @key = SecurityHelper.get_api_key
+        @api_key = create :api_key, key: @key
       end
 
       it 'should hash the key' do
@@ -34,8 +35,8 @@ RSpec.describe ApiKey, :type => :model do
 
   describe 'expiration' do
     before :each do
-      user
-      api_key
+      @user = create :user
+      @api_key = create :api_key
     end
 
     it 'should expire an API key when being deleted' do
