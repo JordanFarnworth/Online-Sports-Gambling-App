@@ -4,7 +4,7 @@ RSpec.describe GroupsController, :type => :controller do
   describe 'GET index' do
     before(:each) do
       logged_in_user
-      group
+      @group = create :group
     end
 
     context 'json request' do
@@ -32,7 +32,7 @@ RSpec.describe GroupsController, :type => :controller do
       end
 
       it 'should show an error if validations fail' do
-        group
+        @group = create :group
         post :create, format: :json, group: { name: 'a' }
         expect(response.status).to eql 400
       end
@@ -55,7 +55,7 @@ RSpec.describe GroupsController, :type => :controller do
   describe 'PUT group' do
     before :each do
       logged_in_user
-      group
+      @group = create :group
     end
 
     context 'json request' do
@@ -66,7 +66,7 @@ RSpec.describe GroupsController, :type => :controller do
 
       it 'should show an error if validations fail' do
         @group1 = @group
-        group
+        @group = create :group
         put :update, format: :json, id: @group1.id, group: { name: 'b' }
         expect(response.status).to eql 400
       end
@@ -87,7 +87,7 @@ RSpec.describe GroupsController, :type => :controller do
 
   describe 'DELETE group' do
     before :each do
-      group
+      @group = create :group
       logged_in_user
     end
 
@@ -108,7 +108,8 @@ RSpec.describe GroupsController, :type => :controller do
 
   describe 'GET users' do
     before(:each) do
-      group_with_user
+      @group = create :group
+      @group_membership = create :group_membership, group: @group
       logged_in_user
     end
 
@@ -121,7 +122,8 @@ RSpec.describe GroupsController, :type => :controller do
 
   describe 'GET show' do
     before :each do
-      group_with_user
+      @group = create :group
+      @group_membership = create :group_membership, group: @group
       logged_in_user
     end
 

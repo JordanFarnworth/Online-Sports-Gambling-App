@@ -7,7 +7,7 @@ RSpec.describe RoleMembershipsController, type: :controller do
     end
 
     it 'should create a role membership' do
-      u = user
+      u = create :user
       post :create, format: :json, role_id: @role.id, role_membership: { user_id: u.id }
       expect(response.status).to eql 200
       json = JSON.parse response.body

@@ -12,7 +12,7 @@ RSpec.describe GroupMembership, type: :model do
     end
 
     it 'should allow multiple memberships in the same group with different users' do
-      u = user
+      u = create :user
       gm = @group.group_memberships.new user: u
       expect(gm.save).to be_truthy
     end

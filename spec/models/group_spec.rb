@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Group, type: :model do
   describe 'validations' do
     before :each do
-      group
+      @group = create :group
     end
 
     it 'should receive a default state' do
