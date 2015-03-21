@@ -27,7 +27,7 @@ class Group < ActiveRecord::Base
   def default_settings
     self.settings[:max_users] ||= 10
     self.settings[:availability] ||= "Public"
-    self.settings[:max_lobbies] ||= 20
+    self.settings[:lobbies] ||= 20
     self.settings[:description] ||= "This group is going to be great!"
   end
 

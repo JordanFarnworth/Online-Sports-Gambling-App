@@ -29,7 +29,35 @@ $('.groups.show').ready ->
   $('div.list-group a.group-settings-show').on 'click', ->
     $('div.row div.group-main-wrapper').find('*').remove()
     loadGroupSettings()
-  $('[data-toggle="tooltip"]').tooltip()
+  $('#update-group-settings').on 'click', ->
+    updateGroupSettings()
+
+
+updateModalContent = (data) ->
+  $('#group-name').val(data.name)
+  $('#max-users').val(data.settings.max_users)
+  $('#avail').val(data.settings.availability)
+  $('textarea').val(data.settings.description)
+  $('#lobbies').val(data.settings.lobbies)
+
+
+updateGroupSettings = ->
+  group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
+  $.ajax "/api/v1/groups/#{group}",
+    type: 'put'
+    dataType: 'json'
+    data:
+      group:
+        name: $('#group-name').val()
+        settings:
+          max_users: $('#max-users').val()
+          lobbies: $('#lobbies').val()
+          description: $('textarea').val()
+          availability: $('select#avail').val()
+    success: (data) ->
+      $('#my-group-setting-modal').modal('hide')
+      loadGroupSettings()
+
 
 
 loadGroupMain = ->
@@ -65,8 +93,8 @@ loadGroupSettings = (data) ->
     type: 'get'
     dataType: 'json'
     success: (data) ->
-      console.log(data.settings)
       passSettingsData(data)
+      updateModalContent(data)
 
 
       # Creating Templates with data
