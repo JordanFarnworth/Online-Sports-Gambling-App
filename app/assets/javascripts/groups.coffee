@@ -6,29 +6,13 @@ $('.groups.index').ready ->
 
 $('.groups.show').ready ->
   loadGroupMain()
+  loadGroupUsers()
+  loadGroupSettings()
+  loadGroupStats()
+  loadGroupLobbies()
   $(' div.list-group a.list-group-item').on 'click',  ->
     $('div.list-group a.active').removeClass('active')
     $(this).addClass('active')
-    #events for icon navbar on groups#show page
-    #Group's Information Page
-  $('div.list-group a.group-show').on 'click', ->
-    loadGroupMain()
-    #Users in this group
-  $('div.list-group a.group-users-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupUsers()
-    # Group's betting
-  $('div.list-group a.group-lobbies-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupLobbies()
-    # Group's Stats
-  $('div.list-group a.group-stats-show').on 'click', ->
-#    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupStats()
-    # Group's Settings
-  $('div.list-group a.group-settings-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupSettings()
   $('#update-group-settings').on 'click', ->
     updateGroupSettings()
 
@@ -67,6 +51,8 @@ loadGroupMain = ->
     dataType: 'json'
     success: (data) ->
       passData(data)
+      $('div.list-group a.group-show').on 'click', ->
+        passData(data)
 
 loadGroupUsers = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
@@ -74,17 +60,20 @@ loadGroupUsers = ->
     type: 'get'
     dataType: 'json'
     success: (data) ->
-      passUsersData(data)
+      $('div.list-group a.group-users-show').on 'click', ->
+        passUsersData(data)
 
 
 loadGroupLobbies = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  passBetsData()
+  $('div.list-group a.group-lobbies-show').on 'click', ->
+    passLobbiesData()
 
 
 loadGroupStats = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  passStatsData()
+  $('div.list-group a.group-stats-show').on 'click', ->
+    passStatsData()
 
 
 loadGroupSettings = (data) ->
@@ -94,6 +83,8 @@ loadGroupSettings = (data) ->
     dataType: 'json'
     success: (data) ->
       passSettingsData(data)
+      $('div.list-group a.group-settings-show').on 'click', ->
+        passSettingsData(data)
       updateModalContent(data)
 
 
@@ -104,12 +95,9 @@ passData = (data) ->
   render(data, "group-info-page")
 
 passUsersData = (data) ->
-#  debugger
-#  $.each data['results'], (u) ->
-#    u.created_at = new Date(data.created_at).toLocaleDateString()
   render(data, "group-users-page")
 
-passBetsData = (data) ->
+passLobbiesData = (data) ->
   render(data, "group-lobbies-page")
 
 passStatsData = (data) ->
@@ -119,6 +107,7 @@ passSettingsData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
   render(data, "group-settings-page")
 
+  #render engine
 render = (data, id) ->
   template = Handlebars.compile($('script#' + id).html())
   temp = $(template(data))
