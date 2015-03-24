@@ -57,7 +57,7 @@ loadGroupMain = ->
 
 loadGroupUsers = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  $.ajax "/api/v1/groups/#{group}/users",
+  $.ajax "/api/v1/groups/#{group}/users?include[]=user",
     type: 'get'
     dataType: 'json'
     success: (data) ->
