@@ -10,9 +10,6 @@ $('.groups.show').ready ->
   loadGroupStats()
   loadGroupLobbies()
   loadGroupMain()
-  $(' div.list-group a.list-group-item').on 'click',  ->
-    $('div.list-group a.active').removeClass('active')
-    $(this).addClass('active')
   $('#update-group-settings').on 'click', ->
     updateGroupSettings()
 
@@ -84,30 +81,26 @@ loadGroupSettings = (data) ->
 
 passData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
-  $('div.list-group a.group-show').on 'click', ->
-    render(data, "group-info-page")
+  render(data, "group-info-page", '#group_show_pane')
 
 passUsersData = (data) ->
-  $('div.list-group a.group-users-show').on 'click', ->
-    render(data, "group-users-page")
+  render(data, "group-users-page", '#group_users_pane')
 
 passLobbiesData = (data) ->
-  $('div.list-group a.group-lobbies-show').on 'click', ->
-    render(data, "group-lobbies-page")
+  render(data, "group-lobbies-page", '#group_lobbies_pane')
 
 passStatsData = (data) ->
-  $('div.list-group a.group-stats-show').on 'click', ->
-    render(data, "group-stats-page")
+  render(data, "group-stats-page", '#group_stats_pane')
 
 passSettingsData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
-  $('div.list-group a.group-settings-show').on 'click', ->
-    render(data, "group-settings-page")
+  render(data, "group-settings-page", '#group_settings_pane')
 
 #render engine
-render = (data, id) ->
+render = (data, id, pane) ->
+  $(pane + ' i').remove()
   template = Handlebars.compile($('script#' + id).html())
   temp = $(template(data))
-  $('div.row div.group-main-wrapper').html(temp)
+  $(pane).html(temp)
 
 
