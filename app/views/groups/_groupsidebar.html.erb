@@ -9,7 +9,7 @@
 <script type="text/x-handlebars-template" id="group-users-page" >
 
   {{#each results}}
-  <p>{{display_name}}</p>
+  <p>{{user.display_name}}</p>
   {{/each}}
 
 </script>
@@ -30,7 +30,7 @@
   <div class="well group-name-well">
     <h1 class="inline">{{name}}'s Settings</h1>
     <span class="inline edit-group-settings pull-right">
-      <a href="" data-toggle="modal" data-target="#myModal">
+      <a href="" data-toggle="modal" data-target="#my-group-setting-modal">
         <i class="fa fa-pencil">
         </i>
       </a>
@@ -41,7 +41,7 @@
   <h5>Created On:</h5><p>{{created_at}}</p>
   <h5>Maximum amount of Users:</h5><p>{{settings.max_users}}</p>
   <h5>Availability</h5><p>{{settings.availability}}</p>
-  <h5>Maximum amount of lobbies</h5><p>{{settings.max_lobbies}}</p>
+  <h5>Lobbies</h5><p>{{settings.lobbies}}</p>
   <h5>Group Description:</h5><p>{{settings.description}}</p>
 
 </script>
@@ -59,7 +59,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="my-group-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -72,38 +72,32 @@
             <div class="form-group">
               <label class="col-lg-2 control-label">Name</label>
               <div class="col-lg-10">
-                <input type="text" class="form-control" >
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Created</label>
-              <div class="col-lg-10">
-                <input  class="form-control" >
+                <input  class="form-control" id="group-name">
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Max&nbsp;Users</label>
               <div class="col-lg-2">
-                <input  class="form-control" >
+                <input id="max-users"  class="form-control" >
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Lobbies</label>
               <div class="col-lg-2">
-                <input  class="form-control" >
+                <input  class="form-control" id="lobbies" >
               </div>
             </div>
             <div class="form-group">
               <label for="textArea" class="col-lg-2 control-label">Description</label>
               <div class="col-lg-10">
-                <textarea class="form-control" rows="3" id="textArea"></textarea>
+                <textarea class="form-control" rows="3" id="description textArea"></textarea>
                 <span class="help-block"><em>This will be the description that displays on your group home page</em></span>
               </div>
             </div>
             <div class="form-group">
               <label for="select" class="col-lg-2 control-label">Availability</label>
               <div class="col-lg-10">
-                <select class="form-control" id="select">
+                <select class="form-control" id="avail" >
                   <option>Public</option>
                   <option>Private</option>
                 </select>
@@ -114,7 +108,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="update-group-settings" >Save changes</button>
       </div>
     </div>
   </div>

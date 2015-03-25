@@ -5,32 +5,46 @@
 $('.groups.index').ready ->
 
 $('.groups.show').ready ->
+  loadGroupUsers()
+  loadGroupSettings()
+  loadGroupStats()
+  loadGroupLobbies()
   loadGroupMain()
   $(' div.list-group a.list-group-item').on 'click',  ->
     $('div.list-group a.active').removeClass('active')
     $(this).addClass('active')
-    #events for icon navbar on groups#show page
-    #Group's Information Page
-  $('div.list-group a.group-show').on 'click', ->
-    loadGroupMain()
-    #Users in this group
-  $('div.list-group a.group-users-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupUsers()
-    # Group's betting
-  $('div.list-group a.group-lobbies-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupLobbies()
-    # Group's Stats
-  $('div.list-group a.group-stats-show').on 'click', ->
-#    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupStats()
-    # Group's Settings
-  $('div.list-group a.group-settings-show').on 'click', ->
-    $('div.row div.group-main-wrapper').find('*').remove()
-    loadGroupSettings()
-  $('[data-toggle="tooltip"]').tooltip()
+  $('#update-group-settings').on 'click', ->
+    updateGroupSettings()
 
+updateModalContent = (data) ->
+  $('#group-name').val(data.name)
+  $('#max-users').val(data.settings.max_users)
+  $('#avail').val(data.settings.availability)
+  $('textarea').val(data.settings.description)
+  $('#lobbies').val(data.settings.lobbies)
+
+#Juery UPDATE functions
+
+updateGroupSettings = ->
+  group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
+  $.ajax "/api/v1/groups/#{group}",
+    type: 'put'
+    dataType: 'json'
+    data:
+      group:
+        name: $('#group-name').val()
+        settings:
+          max_users: $('#max-users').val()
+          lobbies: $('#lobbies').val()
+          description: $('textarea').val()
+          availability: $('select#avail').val()
+    success: (data) ->
+      $('#my-group-setting-modal').modal('hide')
+      passData(data)
+      passSettingsData(data)
+      render(data, "group-settings-page")
+
+#Jquery GET functions
 
 loadGroupMain = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
@@ -39,25 +53,23 @@ loadGroupMain = ->
     dataType: 'json'
     success: (data) ->
       passData(data)
+      render(data, "group-info-page")
 
 loadGroupUsers = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  $.ajax "/api/v1/groups/#{group}/users",
+  $.ajax "/api/v1/groups/#{group}/users?include[]=user",
     type: 'get'
     dataType: 'json'
     success: (data) ->
       passUsersData(data)
 
-
 loadGroupLobbies = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
-  passBetsData()
-
+  passLobbiesData()
 
 loadGroupStats = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   passStatsData()
-
 
 loadGroupSettings = (data) ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
@@ -65,34 +77,37 @@ loadGroupSettings = (data) ->
     type: 'get'
     dataType: 'json'
     success: (data) ->
-      console.log(data.settings)
       passSettingsData(data)
+      updateModalContent(data)
 
-
-      # Creating Templates with data
+# Creating Templates with data
 
 passData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
-  render(data, "group-info-page")
+  $('div.list-group a.group-show').on 'click', ->
+    render(data, "group-info-page")
 
 passUsersData = (data) ->
-#  debugger
-#  $.each data['results'], (u) ->
-#    u.created_at = new Date(data.created_at).toLocaleDateString()
-  render(data, "group-users-page")
+  $('div.list-group a.group-users-show').on 'click', ->
+    render(data, "group-users-page")
 
-passBetsData = (data) ->
-  render(data, "group-lobbies-page")
+passLobbiesData = (data) ->
+  $('div.list-group a.group-lobbies-show').on 'click', ->
+    render(data, "group-lobbies-page")
 
 passStatsData = (data) ->
-  render(data, "group-stats-page")
+  $('div.list-group a.group-stats-show').on 'click', ->
+    render(data, "group-stats-page")
 
 passSettingsData = (data) ->
   data.created_at = new Date(data.created_at).toLocaleDateString()
-  render(data, "group-settings-page")
+  $('div.list-group a.group-settings-show').on 'click', ->
+    render(data, "group-settings-page")
 
+#render engine
 render = (data, id) ->
   template = Handlebars.compile($('script#' + id).html())
   temp = $(template(data))
   $('div.row div.group-main-wrapper').html(temp)
+
 

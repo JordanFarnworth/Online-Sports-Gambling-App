@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
   include PaginationHelper
   include Api::V1::Group
   include Api::V1::User
+  include Api::V1::GroupMembership
 
   before_action :find_group, only: [:users, :show, :edit, :update, :destroy]
   before_action :find_groups, only: [:index]
@@ -88,10 +89,13 @@ class GroupsController < ApplicationController
 
 
   def users
-    @users = @group.users
+    includes = params[:include] || []
+    @gms = @group.group_memberships
     respond_to do |format|
       format.json do
-        render json: pagination_json(@users, :users_json), status: :ok
+        @gms = @gms.includes(:user) if includes.include?('user')
+        @gms = @gms.includes(:group) if includes.include?('group')
+        render json: pagination_json(@gms, :group_memberships_json, includes), status: :ok
       end
       format.html
     end
@@ -99,7 +103,7 @@ class GroupsController < ApplicationController
 
   private
   def group_params
-    params.require(:group).permit(:name)
+    params.require(:group).permit(:name, settings: [:max_users, :description, :availability, :lobbies])
   end
 end
 
