@@ -89,8 +89,6 @@ ActiveRecord::Schema.define(version: 20150309171517) do
 
   add_index "monetary_transactions", ["user_id"], name: "index_monetary_transactions_on_user_id"
 
-<<<<<<< HEAD
-=======
   create_table "page_views", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "real_user_id"
@@ -110,7 +108,6 @@ ActiveRecord::Schema.define(version: 20150309171517) do
   add_index "page_views", ["real_user_id"], name: "index_page_views_on_real_user_id"
   add_index "page_views", ["user_id"], name: "index_page_views_on_user_id"
 
->>>>>>> master
   create_table "payments", force: :cascade do |t|
     t.integer  "monetary_transaction_id"
     t.integer  "user_id"
