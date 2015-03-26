@@ -1,0 +1,9 @@
+<%= bootstrap_form_for @payment, layout: :horizontal, label_col: 'col-md-2', control_col: 'col-md-6' do |f| %>
+  <%= f.select :gateway, options_for_select(Payment::VALID_GATEWAYS) %>
+  <%= f.number_field :amount, value: 1, min: 1, max: 9999, prepend: '$', append: '.00' %>
+  <div class="row">
+    <div class="col-md-offset-2 col-md-6">
+      <%= f.primary 'Process', class: 'col-md-offset-2 col-md-6' %>
+    </div>
+  </div>
+<% end %>

@@ -9,9 +9,10 @@ class Payment < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :uuid
   validates_inclusion_of :gateway, in: VALID_GATEWAYS
-  validates_inclusion_of :state, in: %w(initiated processed)
+  validates_inclusion_of :state, in: %w(initiated processed failed)
   validates_numericality_of :amount, greater_than: 0.0, less_than: 10000.0, allow_nil: true
 
+  serialize :parameters, Hash
 
   before_validation do
     self.uuid ||= SecureRandom.uuid
@@ -41,7 +42,7 @@ class Payment < ActiveRecord::Base
       return: "#{Rails.application.secrets.app_host}#{return_path}",
       invoice: self.uuid,
       amount: self.amount,
-      notify_url: "#{Rails.application.secrets.app_host}/payments"
+      notify_url: "#{Rails.application.secrets.app_host}/payment_processor/paypal"
     }
     "#{Rails.application.secrets.paypal_host}/cgi-bin/webscr?" + values.to_query
   end
