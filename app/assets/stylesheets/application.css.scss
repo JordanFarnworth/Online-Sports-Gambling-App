@@ -62,7 +62,7 @@ ul[class*=ac-] {
   z-index: 1050;
 }
 
-.list-group-item.active a {
+.list-group-item.active > a {
   color: #ffffff;
 }
 
@@ -73,4 +73,14 @@ ul[class*=ac-] {
 .slight-margins {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.ui-menu-item {
+  color: $gray-base !important;
+}
+
+.ui-menu-item.ui-state-focus {
+  border: 0px !important;
+  background: $component-active-bg !important;
+  color: $component-active-color !important;
 }
