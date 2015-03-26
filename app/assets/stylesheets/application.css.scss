@@ -15,6 +15,7 @@
  *= require jquery-ui
  */
 
+
 @import '../../../vendor/assets/stylesheets/_variables.scss';
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
@@ -63,4 +64,13 @@ ul[class*=ac-] {
 
 .list-group-item.active a {
   color: #ffffff;
+}
+
+.spacer {
+  margin-top: 60px;
+}
+
+.slight-margins {
+  margin-left: 10px;
+  margin-right: 10px;
 }

@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :roles, -> { active }, through: :role_memberships
   has_many :monetary_transactions
   has_many :payments
+  has_many :page_views
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }

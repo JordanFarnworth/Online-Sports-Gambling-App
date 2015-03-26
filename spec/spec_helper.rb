@@ -17,8 +17,10 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'simplecov'
+require 'factory_girl'
 SimpleCov.start
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -88,60 +90,21 @@ RSpec.configure do |config|
 =end
 end
 
-def user(opts = {})
-  uuid = SecureRandom.uuid
-  opts[:password] ||= uuid
-  opts[:username] ||= uuid
-  opts[:display_name] ||= uuid
-  opts[:email] ||= uuid + '@test.com'
-  user = User.create! username: opts[:username], display_name: opts[:display_name], email: opts[:email], password: opts[:password]
-  @user ||= user
-  user
-end
-
-def login_session(opts = {})
-  @key = SecurityHelper.get_session_key
-  @login_session = @user.login_sessions.create key: SecurityHelper.sha_hash(@key)
-end
-
 def ability
-  user unless @user
+  @user ||= create :user
   @ability = Ability.new @user
 end
 
-def group(opts = {})
-  opts[:name] ||= SecureRandom.uuid
-  @group = Group.create name: opts[:name]
-end
-
-def group_with_user(opts = {})
-  user opts
-  group opts
-  @group_membership = @user.group_memberships.create group: @group
-end
-alias :user_with_group :group_with_user
-
 def logged_in_user(opts = {})
   user_with_role opts
-  login_session
+  @key = SecurityHelper.get_session_key
+  @login_session = create :login_session, key: SecurityHelper.sha_hash(@key), user: @user
   request.cookies['sports_b_key'] = @key
 end
 
-def api_key(opts = {})
-  @key = SecurityHelper.get_api_key
-  @api_key = @user.api_keys.create key: @key
-end
-
 def message(opts = {})
-  user unless @user
-  opts[:subject] ||= 'asdf'
-  opts[:body] ||= 'asdf'
-  opts[:recipients] ||= [user.id]
-  @message = Message.new subject: opts[:subject], body: opts[:body], sender: @user
-  opts[:recipients].each do |i|
-    @message.message_participants.build({ user_id: i })
-  end
-  @message.save
+  @user ||= create :user
+  @message = create(:message, { sender: @user }.merge(opts))
 end
 
 def role(opts = {})
@@ -160,24 +123,35 @@ def role(opts = {})
   @role.save
 end
 
+def group_with_user
+  @group ||= create :group
+  @user ||= create :user
+  @group_membership = create :group_membership, user: @user, group: @group
+end
+alias :user_with_group :group_with_user
+
 def user_with_role(opts = {})
-  user opts
+  @user ||= create :user
   role opts
   @role_membership = @role.add_user @user
 end
 alias :role_with_user :user_with_role
 
 def transaction(opts = {})
-  user unless @user
+  @user ||= create :user
   opts[:transaction_type] ||= 'payment'
   opts[:amount] ||= 0.01
   @transaction = @user.monetary_transactions.create transaction_type: opts[:transaction_type], amount: opts[:amount]
 end
 
 def payment(opts = {})
-  user unless @user
+  @user ||= create :user
   opts[:gateway] ||= 'paypal'
   opts[:amount] ||= 0.01
   @payment = @user.payments.create gateway: opts[:gateway], monetary_transaction: opts[:transaction]
   @payment
+end
+
+def parse_json(data)
+  JSON.parse data
 end

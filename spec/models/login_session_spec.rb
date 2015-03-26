@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe LoginSession, type: :model do
   before :all do
-    user
+    @user = create :user
   end
 
   describe 'creation' do
@@ -15,7 +15,7 @@ RSpec.describe LoginSession, type: :model do
 
   describe 'expiration' do
     before :all do
-      login_session
+      @login_session = create :login_session
     end
 
     it 'should not be expired when initially created' do

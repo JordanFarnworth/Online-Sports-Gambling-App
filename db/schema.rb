@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150301040403) do
+ActiveRecord::Schema.define(version: 20150309171517) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -89,6 +89,28 @@ ActiveRecord::Schema.define(version: 20150301040403) do
 
   add_index "monetary_transactions", ["user_id"], name: "index_monetary_transactions_on_user_id"
 
+<<<<<<< HEAD
+=======
+  create_table "page_views", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "real_user_id"
+    t.string   "path"
+    t.string   "ip_address"
+    t.string   "http_method"
+    t.text     "user_agent"
+    t.text     "parameters"
+    t.string   "referrer"
+    t.string   "request_format"
+    t.string   "controller"
+    t.string   "action"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "page_views", ["real_user_id"], name: "index_page_views_on_real_user_id"
+  add_index "page_views", ["user_id"], name: "index_page_views_on_user_id"
+
+>>>>>>> master
   create_table "payments", force: :cascade do |t|
     t.integer  "monetary_transaction_id"
     t.integer  "user_id"

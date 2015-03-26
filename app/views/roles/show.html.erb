@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row slight-margins">
   <div class="col-sm-3">
     <%= render partial: 'roles_sidebar' %>
   </div>
@@ -20,6 +20,26 @@
         </div>
       </div>
     </div>
+    <% if can? :manage, RoleMembership %>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#add_user_to_role_modal">Add User</button>
+      <div class="modal fade" id="add_user_to_role_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">Add User to <%= @role.name %></div>
+            <div class="modal-body">
+              <%= bootstrap_form_tag url: '#' do |f| %>
+                <%= f.text_field :user, label: 'Start typing a user to be added' %>
+              <% end %>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">Close</button>
+              <button class="btn btn-primary" name="add-user-to-role">Add User</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="spacer"></div>
   </div>
   <%= render partial: 'users_template' %>
 </div>

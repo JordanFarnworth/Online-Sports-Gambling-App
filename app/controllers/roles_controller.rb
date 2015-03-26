@@ -2,6 +2,7 @@ class RolesController < ApplicationController
   include PaginationHelper
   include Api::V1::User
   include Api::V1::Role
+  include Api::V1::RoleMembership
 
   before_action :find_role, only: [:show, :edit, :update, :destroy, :users]
   before_action :find_roles, only: [:index, :show]
@@ -89,10 +90,10 @@ class RolesController < ApplicationController
 
   def users
     authorize! :read, @role
-    @users = @role.users.active
+    @rms = @role.role_memberships.includes(:user)
     respond_to do |format|
       format.json do
-        render json: pagination_json(@users, :users_json), status: :ok
+        render json: pagination_json(@rms, :role_memberships_json), status: :ok
       end
     end
   end

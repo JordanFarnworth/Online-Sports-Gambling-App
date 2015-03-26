@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe MessagesController, type: :controller do
   describe 'GET index' do
     before :each do
-      user
+      @user = create :user
       message
       logged_in_user
     end
@@ -61,7 +61,7 @@ RSpec.describe MessagesController, type: :controller do
     end
 
     it 'should create messages' do
-      u = user
+      u = create :user
       post :create, format: :json, message: { subject: 'asdf', body: 'asdf', message_participants_attributes: [ { user_id: u.id } ] }
       expect(response.status).to eql 200
     end
