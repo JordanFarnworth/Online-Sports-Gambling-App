@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :users, except: [:new] do
       post 'masquerade'
     end
+    resources :groups
     resources :messages, only: :index
     resources :roles
     get 'login' => 'login#index'
@@ -19,7 +20,10 @@ Rails.application.routes.draw do
 
   scope :api, defaults: { format: :json }, constraints: { format: :json } do
     scope :v1 do
-      resources :users, except: [:new, :edit]
+      resources :group_memberships, only: [:destroy, :create]
+      resources :users, except: [:new, :edit] do
+        get 'group_memberships' => 'users#group_memberships'
+      end
       get 'messages/recipients' => 'messages#search_recipients'
       resources :messages, except: [:new, :edit]
       resources :groups, except: [:new, :edit] do
@@ -29,6 +33,7 @@ Rails.application.routes.draw do
         get 'users' => 'roles#users'
         resources :role_memberships, only: [:create, :destroy]
       end
+
     end
   end
 end

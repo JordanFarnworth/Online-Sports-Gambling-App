@@ -1,30 +1,36 @@
-<div class="row well user-base-info">
-  <div class="col-md-3 ">
-    <%= image_tag "bat.jpg", class: 'img-rounded', style: "width:200px; height:150px;" %>
-    <span class="icon-inline">
-      <h3><%= @user.display_name %></h3>
-      <span class="pull-right edit-usr-info">
-        <%= link_to edit_user_path(@user) do %>
-        <!--<a href="#" data-toggle="modal" data-target="#myUserModal">-->
-          <i class="fa fa-pencil"></i>
-        <% end %>
-        <!--</a>-->
-      </span>
-    </span>
-    <p><%= @user.username %></p>
-    <p><%= @user.email %></p>
+<script type="text/x-handlebars-template" id="users_show_page">
+
+  <div class="col-md-3">
+    <h1>{{display_name}}</h1>
+    <h4>{{username}}</h4>
+    <h4>{{email}}</h4>
+  </div>
+
+  <div class="col-md-3 col-md-offset-2">
+    <div class="circular ">
+    </div>
+  </div>
+
+  <span class="pull-right edit-usr-info">
+    <a href="#" data-toggle="modal" data-target="#myUserModal">
+      <i class="fa fa-pencil"></i>
+    </a>
+  </span>
+</script>
+
+<div class="row user-base-info">
+  <div class="col-md-12 well ">
+    <div class="users_show_page">
+    </div>
   </div>
 </div>
 
-<button type="button" class="btn btn-primary" >
-  Reset Password
-</button>
 <% if can?(:masquerade, @user) %>
   <%= link_to 'Become', user_masquerade_path(@user), method: :post, class: 'btn btn-info' %>
 <% end %>
 
 <!-- Modal -->
-<div class="modal fade" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" name="update-user-modal" id="myUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -41,9 +47,10 @@
         <% end %>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-danger" >Reset Password</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning" name="clear-modal">Clear Modal</button>
-        <button type="button" class="btn btn-primary" name="update-user">Save changes</button>
+        <button type="button" class="btn btn-warning" id="clear-modal">Clear Modal</button>
+        <button type="button" class="btn btn-primary" id="update-user">Save changes</button>
       </div>
     </div>
   </div>

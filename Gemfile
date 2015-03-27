@@ -51,6 +51,7 @@ gem 'bootstrap-sass', '>= 3.2.0'
 gem 'autoprefixer-rails'
 gem 'will_paginate-bootstrap'
 gem 'font-awesome-rails'
+gem 'vider', github: 'wazery/vider'
 
 group :mysql do
   gem 'mysql2'

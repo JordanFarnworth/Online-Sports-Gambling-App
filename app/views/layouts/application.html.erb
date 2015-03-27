@@ -3,21 +3,22 @@
 <head>
   <title>SportsB</title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
   <script type="text/javascript">
-    ENV = {
-      current_user: <%= logged_in? ? @current_user.id : nil %>,
-      permissions: {
-        <% if logged_in? %>
-          <% Role::PERMISSION_TYPES.each do |p| %>
-            <%= (p[:name].to_s + ': ' + @current_user.has_permission?(p[:name]).to_s) + ', ' %>
-          <% end %>
-        <% end %>
-      }
-    };
+      ENV = {
+          current_user: <%= logged_in? ? @current_user.id : nil %>,
+          permissions: {
+              <% if logged_in? %>
+              <% Role::PERMISSION_TYPES.each do |p| %>
+              <%= (p[:name].to_s + ': ' + @current_user.has_permission?(p[:name]).to_s) + ', ' %>
+              <% end %>
+              <% end %>
+          }
+      };
   </script>
 </head>
 <body class="<%= params[:controller] %> <%= params[:action] %>">
@@ -53,10 +54,10 @@
           <% end %></li>
           <li class="dropdown">
             <a type="button" data-toggle="dropdown" href="#">
-              <%= @current_user.display_name %>
+              <span class="logged-in-user"><%= @current_user.display_name %></span>
               <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu navbar-inverse" role="menu">
+            <ul class="dropdown-menu navbar-default" role="menu">
               <li><%= link_to 'My Profile', user_path(@current_user) %></li>
               <li><%= link_to 'Logout', login_path, method: :delete %></li>
             </ul>

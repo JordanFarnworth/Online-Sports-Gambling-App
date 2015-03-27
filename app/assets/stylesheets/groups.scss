@@ -1,3 +1,21 @@
 // Place all the styles related to the groups controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.group-sidebar-show {
+  margin-left: 130px;
+  margin-right: 130px;
+}
+
+.inline {
+  display: inline;
+}
+.edit-group-settings {
+  margin-top: 8px;
+  display: none;
+}
+.group-name-well:hover {
+  .edit-group-settings {
+    display: inline-block;
+  }
+}
