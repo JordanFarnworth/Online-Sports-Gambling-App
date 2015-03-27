@@ -38,6 +38,26 @@ RSpec.describe UsersController, :type => :controller do
     end
   end
 
+  describe 'GET show' do
+    before :each do
+      logged_in_user permissions: :all
+    end
+
+    context 'html request' do
+      it 'should render #show' do
+        get :show, format: :html, id: @user.id
+        expect(response).to render_template 'show'
+      end
+    end
+
+    context 'json request' do
+      it 'should return a user' do
+        get :show, format: :json, id: @user.id
+        expect(response.status).to eql 200
+      end
+    end
+  end
+
   describe 'PUT update' do
     before :each do
       logged_in_user permissions: :all
@@ -55,6 +75,15 @@ RSpec.describe UsersController, :type => :controller do
         put :update, format: :html, id: @user.id, user: { username: @username }
         expect(response).to render_template 'edit'
       end
+    end
+
+    context 'json request' do
+      it 'should update a user' do
+        put :update, format: :json, id: @user.id, user: { display_name: 'asdf' }
+        expect(response.status).to eql 200
+      end
+
+      pending 'json update failure'
     end
   end
 
@@ -141,6 +170,23 @@ RSpec.describe UsersController, :type => :controller do
       delete :stop_masquerading, format: :html
       expect(response).to redirect_to(user_path(@user))
       expect(response.cookies['sports_b_masquerade_user']).to be_nil
+    end
+  end
+
+  describe 'GET group_memberships' do
+    before :each do
+      logged_in_user permissions: :all
+      group_with_user
+    end
+
+    it 'should return a listing of group memberships' do
+      get :group_memberships, format: :json, user_id: @user.id
+      expect(parse_json(response.body).map { |i| i['id'] }).to include @group_membership.id
+    end
+
+    it 'should include optional groups in the response' do
+      get :group_memberships, format: :json, user_id: @user.id, include: ['group']
+      expect(parse_json(response.body).map { |i| i['group']['id'] }).to include @group.id
     end
   end
 end

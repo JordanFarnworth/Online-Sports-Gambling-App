@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/wazery/vider.git
+  revision: 9647256685a0ee0f4712267e0ce715207a99e972
+  specs:
+    vider (0.0.1)
+      rails (>= 4.1.6)
+
+GIT
   remote: https://github.com/tomykaira/clockwork.git
   revision: ae2c83d5eee7fda268e03a51edf4e8500a6488ef
   specs:
@@ -251,5 +258,6 @@ DEPENDENCIES
   timecop
   turbolinks
   uglifier (>= 1.3.0)
+  vider!
   web-console (~> 2.0)
   will_paginate-bootstrap

@@ -1,9 +1,22 @@
-<div class="row">
-  <div class="col-md-3" style="margin-left: 70px">
-<%= render "sidebar" %>
-  </div>
+<script type="text/x-handlebars-template" id="user-groups-panel" >
+    <a href="/groups/{{id}}" class="list-group-item" style="text-align: center;">
+      <h2 class="list-group-item-heading">{{name}}</h2>
+      <p class="list-group-item-text">{{created_at}}</p>
+    </a>
+</script>
 
-  <div class="col-md-8" style="text-align: center;">
+<script type="text/javascript" id="user-groups-modal">
+
+</script>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <%= render "sidebar" %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-sm-10 col-md-offset-1" >
     <div class="panel panel-primary">
       <div class="panel-heading">
         <span class="panel-title">Payment Information</span>
@@ -12,24 +25,64 @@
         </span>
       </div>
       <div class="panel-body">
-        Payment info Here
+
       </div>
     </div>
   </div>
 
-
-  <div class="col-md-8" style="text-align: center;">
+  <div class="col-md-5 col-sm-10 user-group-panel" >
     <div class="panel panel-primary">
       <div class="panel-heading">
         <span class="panel-title">Group Information</span>
         <span class="pull-right edit-pane">
-          <i class="fa fa-pencil"></i>
+          <i class="fa fa-plus" data-toggle="modal" data-target="#myGroupEditModal"></i>
         </span>
       </div>
-      <div class="panel-body">
-        Group Info Here
+      <div class="panel-body panel-body-groups" >
+
+      </div>
+
+      <div class="list-group">
+      </div>
+
+      <div class="panel-footer">
       </div>
     </div>
   </div>
+</div>
 
+
+
+
+<!--Group Edit Modal -->
+<div class="modal fade" id="myGroupEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><%= @user.display_name %> Groups</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Add <%= @user.display_name %> to Group</h2>
+        <div name="groups-list-div" style="display: none;">
+          <select name="groups-list" class="form-control" >
+            <% @groups.each_with_index do |g, i| %>
+                <option value="<%= g.id %>"  <%= 'selected' if i == 0 %>><%= g.name %></option>
+            <% end %>
+          </select>
+          <button class="btn btn-primary form-control" name="add-group-membership-confirm">Confirm</button>
+        </div>
+        <h4>
+          <%= link_to '#', name: 'add-group-membership' do %>
+              <i class="fa fa-plus"></i>
+              Add Group
+          <% end %>
+        </h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -22,3 +22,17 @@
     display: inline-block;
   }
 }
+
+.user-grou-panel .panel .panel-body-groups {
+  max-height: 150px;
+  overflow: scroll;
+}
+
+.circular {
+  width: 175px;
+  height: 175px;
+  border-radius: 150px;
+  -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+  background: url(https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSTKkUB0XsBsIAhyE_A2kk2z8Mc2Me1PqV7jh7zVktLWV4cptmv) no-repeat;
+}

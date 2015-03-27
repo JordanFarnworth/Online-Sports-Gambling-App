@@ -1,0 +1,115 @@
+<script type="text/x-handlebars-template" id="group-info-page" >
+
+  <h1>{{name}}</h1>
+  <p>{{created_at}}</p>
+  <p>{{settings.description}}</p>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-users-page" >
+
+  {{#each results}}
+  <p>{{user.display_name}}</p>
+  {{/each}}
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-lobbies-page" >
+
+  <h1>Lobbies</h1>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-stats-page" >
+
+  <h1>Stats</h1>
+
+</script>
+
+<script type="text/x-handlebars-template" id="group-settings-page" >
+  <div class="well group-name-well">
+    <h1 class="inline">{{name}}'s Settings</h1>
+    <span class="inline edit-group-settings pull-right">
+      <a href="" data-toggle="modal" data-target="#my-group-setting-modal">
+        <i class="fa fa-pencil">
+        </i>
+      </a>
+    </span>
+  </div>
+
+  <h5>Name:</h5><p>{{name}}</p>
+  <h5>Created On:</h5><p>{{created_at}}</p>
+  <h5>Maximum amount of Users:</h5><p>{{settings.max_users}}</p>
+  <h5>Availability</h5><p>{{settings.availability}}</p>
+  <h5>Lobbies</h5><p>{{settings.lobbies}}</p>
+  <h5>Group Description:</h5><p>{{settings.description}}</p>
+
+</script>
+
+
+
+<ul class="nav-stacked nav-pills nav" style="text-align: center;">
+  <li class="active"><a href="#group_show_pane" class="group-show" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+  <li><a href="#group_users_pane" class="group-users-show" data-toggle="tab"><i class="fa fa-users"></i></a></li>
+  <li><a href="#group_lobbies_pane" class="group-lobbies-show" data-toggle="tab"><i class="fa fa-money"></i></a></li>
+  <li><a href="#group_stats_pane" class="group-stats-show" data-toggle="tab"><i class="fa fa-bar-chart"></i></a></li>
+  <li><a href="#group_settings_pane" class="group-settings-show" data-toggle="tab"><i class="fa fa-cogs"></i></a></li>
+</ul>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="my-group-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Group</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Name</label>
+              <div class="col-lg-10">
+                <input  class="form-control" id="group-name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Max&nbsp;Users</label>
+              <div class="col-lg-2">
+                <input id="max-users"  class="form-control" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Lobbies</label>
+              <div class="col-lg-2">
+                <input  class="form-control" id="lobbies" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="textArea" class="col-lg-2 control-label">Description</label>
+              <div class="col-lg-10">
+                <textarea class="form-control" rows="3" id="description textArea"></textarea>
+                <span class="help-block"><em>This will be the description that displays on your group home page</em></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="select" class="col-lg-2 control-label">Availability</label>
+              <div class="col-lg-10">
+                <select class="form-control" id="avail" >
+                  <option>Public</option>
+                  <option>Private</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="update-group-settings" >Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

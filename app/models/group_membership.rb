@@ -6,6 +6,9 @@ class GroupMembership < ActiveRecord::Base
 
   validates :group, uniqueness: { scope: :user }
   validates_inclusion_of :state, in: %w(active deleted)
+  validates_each :group, :user do |record, attr, value|
+    record.errors.add attr, 'must be active' if value.nil? || !value.active?
+  end
 
   before_validation do
     self.state ||= :active
