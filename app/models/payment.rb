@@ -3,7 +3,7 @@ class Payment < ActiveRecord::Base
   belongs_to :user
 
   VALID_GATEWAYS = [
-    'paypal'
+    'braintree'
   ]
 
   validates_presence_of :user
@@ -14,9 +14,22 @@ class Payment < ActiveRecord::Base
 
   serialize :parameters, Hash
 
+  scope :failed, -> { where(state: :failed) }
+  scope :processed, -> { where(state: :processed) }
+  scope :initiated, -> { where(state: :initiated) }
+
+  after_initialize do
+    # Failsafe: Mark payments as failed if they remain in an initiated state for more than 2 days
+    if created_at && created_at < 2.days.ago && state == 'initiated'
+      self.state = 'failed'
+      save
+    end
+  end
+
   before_validation do
     self.uuid ||= SecureRandom.uuid
     self.state ||= :initiated
+    self.gateway ||= 'braintree'
   end
 
   after_save do
@@ -26,24 +39,11 @@ class Payment < ActiveRecord::Base
     end
   end
 
-  def gateway_url(return_path = '')
-    raise 'must be saved before serving gateway details' if self.new_record?
-    paypal_url(return_path) if gateway == 'paypal'
+  def mark_as_processed!
+    update state: 'processed'
   end
 
-  # Gateways should not be accessed directly, and should instead reply on `gateway_url`
-  private
-  def paypal_url(return_path)
-    values = {
-      business: Rails.application.secrets.paypal_business_address,
-      cmd: "_xclick",
-      upload: 1,
-      item_name: "Order ##{self.uuid}",
-      return: "#{Rails.application.secrets.app_host}#{return_path}",
-      invoice: self.uuid,
-      amount: self.amount,
-      notify_url: "#{Rails.application.secrets.app_host}/payment_processor/paypal"
-    }
-    "#{Rails.application.secrets.paypal_host}/cgi-bin/webscr?" + values.to_query
+  def mark_as_failed!
+    update state: 'failed'
   end
 end

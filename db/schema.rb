@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309171517) do
+ActiveRecord::Schema.define(version: 20150327132939) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,6 +24,22 @@ ActiveRecord::Schema.define(version: 20150309171517) do
   end
 
   add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "user_id"
@@ -44,6 +60,18 @@ ActiveRecord::Schema.define(version: 20150309171517) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "lobbies", force: :cascade do |t|
+    t.integer  "group_id"
+    t.datetime "betting_begins_at"
+    t.datetime "betting_ends_at"
+    t.text     "settings"
+    t.string   "state"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "lobbies", ["group_id"], name: "index_lobbies_on_group_id"
 
   create_table "login_sessions", force: :cascade do |t|
     t.integer  "user_id"
@@ -113,11 +141,12 @@ ActiveRecord::Schema.define(version: 20150309171517) do
     t.integer  "user_id"
     t.string   "uuid"
     t.string   "gateway"
-    t.decimal  "amount",                  precision: 6, scale: 2
+    t.decimal  "amount",                   precision: 6, scale: 2
     t.string   "state"
     t.text     "parameters"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "braintree_transaction_id"
   end
 
   add_index "payments", ["monetary_transaction_id"], name: "index_payments_on_monetary_transaction_id"

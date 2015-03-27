@@ -36,20 +36,29 @@ RSpec.describe Payment, type: :model do
     end
   end
 
-  describe 'creation' do
-    it 'should not allow gateway_url to be called if not saved' do
-      p = Payment.new
-      expect { p.gateway_url }.to raise_error
+  describe 'scoping' do
+    before :each do
+      payment
     end
 
-    it 'should allow gateway_url to be called if saved' do
-      payment
-      expect { @payment.gateway_url }.to_not raise_error
+    it 'should return payments in an initiated scope' do
+      expect(Payment.initiated).to include @payment
+      expect(Payment.processed).to_not include @payment
+      expect(Payment.failed).to_not include @payment
     end
 
-    it 'should make a reference to the uuid of the payment' do
-      payment
-      expect(@payment.gateway_url.match(@payment.uuid)).to_not be_nil
+    it 'should return payments in a processed scope' do
+      @payment.mark_as_processed!
+      expect(Payment.initiated).to_not include @payment
+      expect(Payment.processed).to include @payment
+      expect(Payment.failed).to_not include @payment
+    end
+
+    it 'should return payments in a failed scope' do
+      @payment.mark_as_failed!
+      expect(Payment.initiated).to_not include @payment
+      expect(Payment.processed).to_not include @payment
+      expect(Payment.failed).to include @payment
     end
   end
 
@@ -62,5 +71,25 @@ RSpec.describe Payment, type: :model do
       @payment.update state: 'processed'
       expect(@payment.monetary_transaction).to_not be_nil
     end
+
+    it 'should mark a payment as processed' do
+      @payment.mark_as_processed!
+      expect(@payment.reload.state).to eql 'processed'
+    end
+
+    it 'should mark a payment as failed' do
+      @payment.mark_as_failed!
+      expect(@payment.reload.state).to eql 'failed'
+    end
+  end
+
+  it 'should mark a payment as failed if it has yet to be processed in 2 days' do
+    payment
+    expect(@payment.state).to eql 'initiated'
+    Timecop.freeze(3.days.from_now) do
+      expect(@payment.reload.state).to eql 'failed'
+    end
+    # Verify the failed state was saved to the table
+    expect(@payment.reload.state).to eql 'failed'
   end
 end

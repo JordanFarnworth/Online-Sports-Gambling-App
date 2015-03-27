@@ -55,6 +55,8 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
     bootstrap_form (2.3.0)
+    braintree (2.40.0)
+      builder (>= 2.0.0)
     builder (3.2.2)
     byebug (3.5.1)
       columnize (~> 0.8)
@@ -199,6 +201,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
+    timecop (0.6.3)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -223,6 +226,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-sass (>= 3.2.0)
   bootstrap_form
+  braintree
   byebug
   cancan
   clockwork!
@@ -244,6 +248,7 @@ DEPENDENCIES
   simplecov
   spring
   sqlite3
+  timecop
   turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)

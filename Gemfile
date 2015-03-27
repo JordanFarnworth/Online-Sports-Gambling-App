@@ -43,6 +43,7 @@ group :development, :test do
 
   gem 'rspec-rails', '~> 3.0'
   gem 'factory_girl_rails'
+  gem 'timecop'
 end
 
 gem 'delayed_job_active_record'
@@ -69,3 +70,4 @@ gem 'jquery-ui-rails'
 gem 'simplecov', :require => false, :group => :test
 
 gem 'pry-rails'
+gem 'braintree'

@@ -146,7 +146,7 @@ end
 
 def payment(opts = {})
   @user ||= create :user
-  opts[:gateway] ||= 'paypal'
+  opts[:gateway] ||= 'braintree'
   opts[:amount] ||= 0.01
   @payment = @user.payments.create gateway: opts[:gateway], monetary_transaction: opts[:transaction]
   @payment
