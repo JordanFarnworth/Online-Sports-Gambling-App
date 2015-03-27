@@ -1,9 +1,31 @@
 class PaymentsController < ApplicationController
-  skip_authorize_resource only: [:success]
-  load_and_authorize_resource find_by: :uuid, except: [:success]
-  skip_before_filter :verify_authenticity_token, only: [:success]
+  include Api::V1::Payment
+  include PaginationHelper
+
+  before_action :find_payments, only: [:index]
+
+  load_and_authorize_resource find_by: :uuid
 
   PARAMS_FOR_JOB = %w(payment_method_nonce)
+
+  def find_payments
+    if api_request?
+      @payments = @current_user.payments
+    else
+      @payments = []
+    end
+  end
+
+  def index
+    includes = params[:include] || []
+    respond_to do |format|
+      format.json do
+        @payments = @payments.includes(:monetary_transaction) if includes.include? 'transaction'
+        render json: pagination_json(@payments, :payments_json, includes), status: :ok
+      end
+      format.html
+    end
+  end
 
   def create
     @payment = @current_user.payments.new payment_params

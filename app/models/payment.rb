@@ -6,7 +6,7 @@ class Payment < ActiveRecord::Base
     'braintree'
   ]
 
-  validates_presence_of :user
+  validates_presence_of :user, on: :create
   validates_presence_of :uuid
   validates_inclusion_of :gateway, in: VALID_GATEWAYS
   validates_inclusion_of :state, in: %w(initiated processed failed)

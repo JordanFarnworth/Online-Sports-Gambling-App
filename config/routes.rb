@@ -15,10 +15,7 @@ Rails.application.routes.draw do
     resources :roles
 
     post 'payment_processor/paypal' => 'payment_processor#paypal'
-    resources :payments, only: [:new, :create, :show] do
-      post 'success'
-    end
-
+    resources :payments, only: [:new, :create, :show, :index]
     get 'login' => 'login#index'
     post 'login' => 'login#verify'
     delete 'login' => 'login#logout'
@@ -40,6 +37,7 @@ Rails.application.routes.draw do
         resources :role_memberships, only: [:create, :destroy]
       end
 
+      resources :payments, only: [:index]
     end
   end
 end
