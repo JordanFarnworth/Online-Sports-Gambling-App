@@ -10,7 +10,10 @@ class PaymentsController < ApplicationController
 
   def find_payments
     if api_request?
-      @payments = @current_user.payments
+      @payments = @current_user.payments.order(created_at: :desc)
+      @payments = @payments.failed if params[:scope] == 'failed'
+      @payments = @payments.initiated if params[:scope] == 'initiated'
+      @payments = @payments.processed if params[:scope] == 'processed'
     else
       @payments = []
     end
