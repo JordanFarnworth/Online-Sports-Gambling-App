@@ -6,11 +6,6 @@ RSpec.describe Payment, type: :model do
       payment
     end
 
-    it 'should have a user' do
-      @payment.user = nil
-      expect(@payment.save).to be_falsey
-    end
-
     it 'should have a valid state' do
       @payment.state = 'asdf'
       expect(@payment.save).to be_falsey
