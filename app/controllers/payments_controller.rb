@@ -35,7 +35,7 @@ class PaymentsController < ApplicationController
     if @payment.save
       ReceivePaymentJob.perform_later(@payment, params.slice(*PARAMS_FOR_JOB))
       flash[:success] = 'Thank you!  Your funds should appear within a few minutes.'
-      redirect_to new_payment_path
+      redirect_to payment_path @payment.uuid
     else
       flash[:error] = 'Oops, there was a problem processing your request'
       render 'new'

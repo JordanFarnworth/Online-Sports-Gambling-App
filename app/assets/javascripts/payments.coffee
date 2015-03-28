@@ -16,7 +16,7 @@ loadPayments = (selector, page = 1) ->
     success: (data) ->
       elem.children('i').remove()
       $.each data['results'], (obj, i) ->
-        elem.children('.list-group').append($(template({ uuid: this.uuid, amount: this.amount, created_at: new Date(this.created_at).toLocaleString()})))
+        elem.children('.list-group').append($(template({ uuid: this.uuid, amount: numeral(this.amount).format('$0,0.00'), created_at: new Date(this.created_at).toLocaleString()})))
       elem.children('.pagination').pagination({ items: data.count, itemsOnPage: data.per_page, currentPage: page, onPageClick: paginatePayments.bind(elem) })
 
 paginatePayments = (page, ev) ->
