@@ -1,14 +1,11 @@
 class PaymentsController < ApplicationController
   include Api::V1::Payment
   include PaginationHelper
-
-  before_action :find_payments, only: [:index]
-
   load_and_authorize_resource find_by: :uuid
 
   PARAMS_FOR_JOB = %w(payment_method_nonce)
 
-  def find_payments
+  def index
     if api_request?
       @payments = @current_user.payments.order(created_at: :desc)
       @payments = @payments.failed if params[:scope] == 'failed'
@@ -17,9 +14,6 @@ class PaymentsController < ApplicationController
     else
       @payments = []
     end
-  end
-
-  def index
     includes = params[:include] || []
     respond_to do |format|
       format.json do

@@ -18,11 +18,13 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username
   validates_uniqueness_of :email
   validates_presence_of :state
+  validates_uniqueness_of :braintree_customer_id
 
   before_validation :infer_values
 
   def infer_values
     self.state ||= :active
+    self.braintree_customer_id ||= SecureRandom.hex 8
   end
 
   def all_messages
