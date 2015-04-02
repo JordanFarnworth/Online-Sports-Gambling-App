@@ -24,6 +24,12 @@ class Group < ActiveRecord::Base
     rp
   end
 
+  def remove_user(user)
+    rp = GroupMembership.find_or_create_by(group: self, user: user)
+    rp.update state: :active
+    rp
+  end
+
   def default_settings
     self.settings[:max_users] ||= 10
     self.settings[:availability] ||= "public"

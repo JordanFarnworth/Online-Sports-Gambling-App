@@ -5,6 +5,7 @@
 $('.groups.index').ready ->
 
 $('.groups.show').ready ->
+  $('#userInputSearch').autocomplete autocompleteParams()
   loadGroupUsers()
   loadGroupSettings()
   loadGroupStats()
@@ -12,6 +13,9 @@ $('.groups.show').ready ->
   loadGroupMain()
   $('#update-group-settings').on 'click', ->
     updateGroupSettings()
+  $('#update-group-users').on 'click', ->
+    addToGroup()
+    $('#userInputSearch').val("")
 
 updateModalContent = (data) ->
   $('#group-name').val(data.name)
@@ -21,6 +25,23 @@ updateModalContent = (data) ->
   $('#lobbies').val(data.settings.lobbies)
 
 #Juery UPDATE functions
+
+addToGroup = () ->
+  group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
+  $.ajax "/api/v1/groups/#{group}/users",
+    type: 'put'
+    dataType: 'json'
+    data: { group_membership:
+            {
+              user_id: $('#userInputSearch').attr('data-user-id'),\
+              group_id: group ,\
+              role: $('#user-to-select').val()
+            }
+          }
+    success: (data, status) ->
+      $('#add-user').modal('hide')
+      loadGroupUsers()
+
 
 updateGroupSettings = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
@@ -68,7 +89,7 @@ loadGroupStats = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   passStatsData()
 
-loadGroupSettings = (data) ->
+loadGroupSettings = () ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   $.ajax "/api/v1/groups/#{group}",
     type: 'get'
@@ -76,6 +97,31 @@ loadGroupSettings = (data) ->
     success: (data) ->
       passSettingsData(data)
       updateModalContent(data)
+
+#jquery remove function
+
+removeUser = (gm) ->
+  $.ajax "/api/v1/group_memberships/#{gm}",
+    type: 'delete'
+    dataType: 'json'
+    data:{}
+    success: ->
+      $('#edit-user').modal('hide')
+      loadGroupUsers()
+
+
+updateUserRole = (gm) ->
+  $.ajax "/api/v1/group_memberships/#{gm}",
+    type: 'put'
+    dataType: 'json'
+    data:
+      group_membership:
+        role: $('select#edit-user-role').val()
+    success: (data) ->
+      $('#edit-user').modal('hide')
+      loadGroupUsers()
+
+
 
 # Creating Templates with data
 
@@ -101,6 +147,45 @@ render = (data, id, pane) ->
   $(pane + ' i').remove()
   template = Handlebars.compile($('script#' + id).html())
   temp = $(template(data))
+  temp.find('i#open-user-edit-modal').on 'click', ->
+    showModal(event)
   $(pane).html(temp)
 
+showModal = (ev) ->
+  $('#edit-user').modal('show')
+  ele = $(ev.target).parents('div.group-user-row')
+  groupMembership = ele.attr('data-group-membership-id')
+  role = ele.attr('data-role')
+  displayName = ele.attr('data-display-name')
+  $('input.edit-user-display-name').val(displayName)
+  $('input.edit-user-display-name').prop('disabled', true)
+  $('#edit-user-role').attr('placholder', role)
+  $('#remove-user-button').on 'click', ->
+    removeUser(groupMembership)
+  $('#update-user-role-button').on 'click', ->
+    updateUserRole(groupMembership)
 
+
+
+
+autocompleteParams = ->
+  group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
+  {
+  source:(request, response) ->
+    $.ajax
+      url: "/api/v1/groups/#{group}/potential_applicants"
+      dataType: "json"
+      data:
+        search_term: request.term
+
+      success: (data) ->
+        data = $.map data['results'], (obj, i) ->
+          {label: obj['display_name'], value: obj['id']}
+        response data
+
+  select:(event, ui) ->
+    event.preventDefault()
+    return unless ui.item
+    $('#userInputSearch').val(ui.item.label)
+    $('#userInputSearch').attr('data-user-id', ui.item.value)
+  }

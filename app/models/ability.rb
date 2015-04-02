@@ -28,6 +28,9 @@ class Ability
       can :search_recipients, Message
 
       # Group permissions
+      can :update, GroupMembership
+      can :potential_applicants, Group
+      can :destroy, GroupMembership
       can :create, Group
       can :create, GroupMembership
       can :manage, Group

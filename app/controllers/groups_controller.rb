@@ -87,6 +87,24 @@ class GroupsController < ApplicationController
     end
   end
 
+  def potential_applicants
+    @group = Group.find params[:id] || params[:group_id]
+    @available_users = User.where.not(id: @group.users.pluck(:id))
+    if params[:search_term]
+      t = params[:search_term]
+      @available_users = @available_users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ?', "%#{t}%", "%#{t}%", "%#{t}%")
+    end
+    respond_to do |format|
+      format.json do
+        render json: pagination_json(@available_users, :users_json), status: :ok
+      end
+      format.html do
+        @available_users = @available_users.paginate pagination_help
+      end
+    end
+  end
+
+
 
   def users
     includes = params[:include] || []
