@@ -25,8 +25,8 @@ class Group < ActiveRecord::Base
   end
 
   def remove_user(user)
-    rp = GroupMembership.find_or_create_by(group: self, user: user)
-    rp.update state: :active
+    rp = GroupMembership.find_by(group: self, user: user)
+    rp.update state: :deleted
     rp
   end
 
