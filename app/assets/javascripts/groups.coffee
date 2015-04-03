@@ -159,7 +159,7 @@ showModal = (ev) ->
   displayName = ele.attr('data-display-name')
   $('input.edit-user-display-name').val(displayName)
   $('input.edit-user-display-name').prop('disabled', true)
-  $('#edit-user-role').attr('placholder', role)
+  $('#edit-user-role').val(role.toLowerCase())
   $('#remove-user-button').on 'click', ->
     removeUser(groupMembership)
   $('#update-user-role-button').on 'click', ->
