@@ -116,7 +116,7 @@ RSpec.describe GroupsController, :type => :controller do
     it 'should return users in a group' do
       get :users, group_id: @group.id, format: :json
       json = JSON.parse(response.body)
-      expect(json['results'].map { |a| a['id'] }).to eql @group.users.pluck(:id)
+      expect(json['results'].map { |a| a['user_id'] }).to eql @group.users.pluck(:id)
     end
   end
 

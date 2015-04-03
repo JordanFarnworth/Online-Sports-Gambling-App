@@ -26,6 +26,7 @@ class Group < ActiveRecord::Base
 
   def remove_user(user)
     rp = GroupMembership.find_by(group: self, user: user)
+    return nil unless rp
     rp.update state: :deleted
     rp
   end
