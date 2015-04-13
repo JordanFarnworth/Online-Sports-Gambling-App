@@ -20,4 +20,5 @@
 //= require jquery-ui
 //= require handlebars
 //= require bootbox
+//= require numeral.min
 //= require_tree .
