@@ -3,9 +3,10 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $('.groups.index').ready ->
+  $('#group-input-search').autocomplete autocompleteGroupParams()
 
 $('.groups.show').ready ->
-  $('#userInputSearch').autocomplete autocompleteParams()
+  $('#userInputSearch').autocomplete autocompleteUserParams()
   loadGroupUsers()
   loadGroupSettings()
   loadGroupStats()
@@ -166,9 +167,31 @@ showModal = (ev) ->
     updateUserRole(groupMembership)
 
 
+autocompleteGroupParams = ->
+  {
+  source:(request, response) ->
+    $.ajax
+      url: "/api/v1/groups",
+      dataType: "json"
+      data:
+        search_term: request.term
+
+      success: (data) ->
+        data = $.map data['results'], (obj, i) ->
+          {label: obj['name'], value: obj['id']}
+        response data
+
+  select:(event, ui) ->
+    event.preventDefault()
+    return unless ui.item
+    $('#userInputSearch').val(ui.item.label)
+    $('#userInputSearch').attr('data-user-id', ui.item.value)
+  }
 
 
-autocompleteParams = ->
+
+
+autocompleteUserParams = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   {
   source:(request, response) ->

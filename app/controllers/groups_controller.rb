@@ -19,6 +19,10 @@ class GroupsController < ApplicationController
   end
 
   def index
+    if params[:search_term]
+      t = params[:search_term]
+      @public_groups = @groups.where('name LIKE ?', "%#{t}%")
+    end
     respond_to do |format|
       format.json do
         render json: pagination_json(@groups, :groups_json), status: :ok
