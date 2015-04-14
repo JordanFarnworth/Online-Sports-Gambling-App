@@ -1,7 +1,0 @@
-require 'braintree'
-
-Braintree::Configuration.environment = :sandbox
-Braintree::Configuration.merchant_id = 'szptxz2hvgkytvwc'
-Braintree::Configuration.public_key = 'vwh6wpymqsv76ckh'
-Braintree::Configuration.private_key = '4d8e98d86ceec2ea40d5fe21436ce098'
-Rails.application.config.braintree_cse_key = 'MIIBCgKCAQEAwEBBNMr6ApT2Wk2GNIF6+63+wn6Ujr06VJW2UAzWisbDcs3oqx3xoJ9N/mCkLeX0cBMZtC5HUveG8z/ovT/d13PexD9iwenKf1DW/P+bdY/w1GSYZMNMHx2TexgBwHJXNq2oEJt/8RDcZ/u6OxW2Mnor/4bFlWisG9aBqCz0Y4kEWYg0fJNhs1sLE4cEaXEnIcDm4QooEAqG3MI9eJAwIhD0TZ2IpqoKhdAjA2lCZ/o4DcYPp1BWWe3Fqrok9McEU2uPft32MnGEXqK6GrsTjECGVs2nPNr0qQF4bdtOxVqqyI1v2n1hCqKTZaIPDCCyNAX5pjSQW/fds1BtpRV4vQIDAQAB'

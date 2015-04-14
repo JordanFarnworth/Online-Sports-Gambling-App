@@ -45,6 +45,10 @@ class Ability
         can :read, User
         can :manage, RoleMembership
       end
+
+      # Payments
+      can :create, Payment
+      can :read, Payment, user_id: user.id
     end
   end
 end
