@@ -23,14 +23,17 @@ Rails.application.routes.draw do
 
   scope :api, defaults: { format: :json }, constraints: { format: :json } do
     scope :v1 do
-      resources :group_memberships, only: [:destroy, :create]
+      resources :group_memberships, only: [:destroy, :create, :update]
       resources :users, except: [:new, :edit] do
         get 'group_memberships' => 'users#group_memberships'
       end
       get 'messages/recipients' => 'messages#search_recipients'
       resources :messages, except: [:new, :edit]
       resources :groups, except: [:new, :edit] do
+        get 'potential_applicants' => 'groups#potential_applicants'
         get 'users' => 'groups#users'
+        delete 'users' => 'group_memberships#destroy'
+        put 'users' => 'group_memberships#create'
       end
       resources :roles, except: [:new, :edit] do
         get 'users' => 'roles#users'

@@ -71,6 +71,16 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe 'deleting users' do
+    it 'should remove the user from the group' do
+      @group = create :group
+      @user = create :user
+      @group.add_user @user
+      @group.remove_user @user
+      expect(@group.users).not_to include @user
+    end
+  end
+
   describe 'adding users' do
     it 'should add a user to a group' do
       @group = create :group

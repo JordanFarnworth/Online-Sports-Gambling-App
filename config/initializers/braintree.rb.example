@@ -1,4 +1,4 @@
-require 'braintree'
+#require 'braintree'
 
 #Braintree::Configuration.environment = :sandbox
 #Braintree::Configuration.merchant_id = ''

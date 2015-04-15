@@ -20,4 +20,28 @@ RSpec.describe GroupMembershipsController, type: :controller do
       end
     end
   end
+
+  describe 'PUT update' do
+    before :each do
+      group_with_user
+      logged_in_user
+    end
+
+    it 'should return no status on update' do
+      put :update, format: :json, id: @group_membership.id, group_membership: { role: :moderator }
+      expect(response.status).to eql 200
+    end
+  end
+
+  describe 'DELETE destroy' do
+    before :each do
+      group_with_user
+      logged_in_user
+    end
+
+    it 'should return no status on update' do
+      delete :destroy, format: :json, id: @group_membership.id
+      expect(response.status).to eql 200
+    end
+  end
 end
