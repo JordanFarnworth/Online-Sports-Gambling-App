@@ -34,9 +34,9 @@ addToGroup = () ->
     dataType: 'json'
     data:
       group_membership:
-              user_id: $('#userInputSearch').attr('data-user-id'),
-              group_id: group ,
-              role: $('#user-to-select').val()
+        user_id: $('#userInputSearch').attr('data-user-id'),
+        group_id: group ,
+        role: $('#user-to-select').val()
     success: (data, status) ->
       $('#add-user').modal('hide')
       loadGroupUsers()
