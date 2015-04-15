@@ -32,13 +32,11 @@ addToGroup = () ->
   $.ajax "/api/v1/groups/#{group}/users",
     type: 'put'
     dataType: 'json'
-    data: { group_membership:
-            {
-              user_id: $('#userInputSearch').attr('data-user-id'),\
-              group_id: group ,\
+    data:
+      group_membership:
+              user_id: $('#userInputSearch').attr('data-user-id'),
+              group_id: group ,
               role: $('#user-to-select').val()
-            }
-          }
     success: (data, status) ->
       $('#add-user').modal('hide')
       loadGroupUsers()
@@ -169,44 +167,44 @@ showModal = (ev) ->
 
 autocompleteGroupParams = ->
   {
-  source:(request, response) ->
-    $.ajax
-      url: "/api/v1/groups",
-      dataType: "json"
-      data:
-        search_term: request.term
+    source:(request, response) ->
+      $.ajax
+        url: "/api/v1/groups",
+        dataType: "json"
+        data:
+          search_term: request.term
 
-      success: (data) ->
-        data = $.map data['results'], (obj, i) ->
-          {label: obj.name, value: obj.id, obj: obj}
-        response data
+        success: (data) ->
+          data = $.map data['results'], (obj, i) ->
+            {label: obj.name, value: obj.id, obj: obj}
+          response data
 
-  select:(event, ui) ->
-    event.preventDefault()
-    return unless ui.item
-    console.log(ui.item)
-    $( "#selected-group-index-page" ).removeClass( "hidden" )
+    select:(event, ui) ->
+      event.preventDefault()
+      return unless ui.item
+      console.log(ui.item)
+      $( "#selected-group-index-page" ).removeClass( "hidden" )
 
   }
 
 autocompleteUserParams = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]
   {
-  source:(request, response) ->
-    $.ajax
-      url: "/api/v1/groups/#{group}/potential_applicants"
-      dataType: "json"
-      data:
-        search_term: request.term
+    source:(request, response) ->
+      $.ajax
+        url: "/api/v1/groups/#{group}/potential_applicants"
+        dataType: "json"
+        data:
+          search_term: request.term
 
-      success: (data) ->
-        data = $.map data['results'], (obj, i) ->
-          {label: obj['display_name'], value: obj['id']}
-        response data
+        success: (data) ->
+          data = $.map data['results'], (obj, i) ->
+            {label: obj['display_name'], value: obj['id']}
+          response data
 
-  select:(event, ui) ->
-    event.preventDefault()
-    return unless ui.item
-    $('#userInputSearch').val(ui.item.label)
-    $('#userInputSearch').attr('data-user-id', ui.item.value)
+    select:(event, ui) ->
+      event.preventDefault()
+      return unless ui.item
+      $('#userInputSearch').val(ui.item.label)
+      $('#userInputSearch').attr('data-user-id', ui.item.value)
   }

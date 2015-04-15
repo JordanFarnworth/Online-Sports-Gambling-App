@@ -1,5 +1,12 @@
 class GroupMembershipsController < ApplicationController
+
+  before_action :find_group_membership, only: [:update, :destroy]
+
   load_and_authorize_resource
+
+  def find_group_membership
+    @group_membership = GroupMembership.find params[:id]
+  end
 
   def create
     @group_membership = GroupMembership.find_or_initialize_by group_membership_params.slice(:user_id, :group_id)
@@ -21,7 +28,6 @@ class GroupMembershipsController < ApplicationController
   end
 
   def update
-    @group_membership = GroupMembership.find params[:id]
     if @group_membership.update group_membership_params
       respond_to do |format|
         format.json do
@@ -32,7 +38,6 @@ class GroupMembershipsController < ApplicationController
   end
 
   def destroy
-    @group_membership = GroupMembership.find params[:id]
     @group_membership.destroy
     respond_to do |format|
       format.json do

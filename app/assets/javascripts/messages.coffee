@@ -149,7 +149,7 @@ autocompleteParams = ->
   {
     source:(request, response) ->
       $.ajax
-        url: "/api/v1/messages/recipients",
+        url: "/api/v1/messages/recipients"
         dataType: "json"
         data:
           search_term: request.term
