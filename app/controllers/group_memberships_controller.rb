@@ -25,7 +25,7 @@ class GroupMembershipsController < ApplicationController
     if @group_membership.update group_membership_params
       respond_to do |format|
         format.json do
-          render nothing: true, status: :no_content
+          render nothing: true, status: 200
         end
       end
     end
@@ -36,7 +36,7 @@ class GroupMembershipsController < ApplicationController
     @group_membership.destroy
     respond_to do |format|
       format.json do
-        render nothing: true, status: :no_content
+        render nothing: true, status: 200
       end
     end
   end

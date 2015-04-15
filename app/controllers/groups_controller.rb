@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
   include Api::V1::User
   include Api::V1::GroupMembership
 
-  before_action :find_group, only: [:users, :show, :edit, :update, :destroy]
+  before_action :find_group, only: [:users, :show, :edit, :update, :destroy, :potential_applicants]
   before_action :find_groups, only: [:index]
 
   load_and_authorize_resource
@@ -92,7 +92,6 @@ class GroupsController < ApplicationController
   end
 
   def potential_applicants
-    @group = Group.find params[:id] || params[:group_id]
     @available_users = User.where.not(id: @group.users.pluck(:id))
     if params[:search_term]
       t = params[:search_term]
@@ -101,9 +100,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       format.json do
         render json: pagination_json(@available_users, :users_json), status: :ok
-      end
-      format.html do
-        @available_users = @available_users.paginate pagination_help
       end
     end
   end

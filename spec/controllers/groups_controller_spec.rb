@@ -7,6 +7,13 @@ RSpec.describe GroupsController, :type => :controller do
       @group = create :group
     end
 
+    it 'should search with a search term' do
+      group2 = create :group
+      get :index, format: :json, search_term: group2.name
+      json = parse_json response.body
+      expect(json['results']).to_not be_nil
+    end
+
     context 'json request' do
       it 'should return groups in json format' do
         get :index, format: :json
@@ -20,7 +27,7 @@ RSpec.describe GroupsController, :type => :controller do
     end
   end
 
-  describe 'POST index' do
+  describe 'POST create' do
     before :each do
       logged_in_user
     end
@@ -132,6 +139,41 @@ RSpec.describe GroupsController, :type => :controller do
       expect(response.status).to eql 200
       json = JSON.parse response.body
       expect(json['id']).to eql @group.id
+    end
+  end
+
+  describe 'GET potential_applicants' do
+    before :each do
+      group_with_user
+      @user2 = create :user
+      logged_in_user
+    end
+
+    it 'should search without a search term' do
+      get :potential_applicants, format: :json, group_id: @group.id
+      expect(assigns(:available_users)).to include @user2
+    end
+
+    it 'should search with a search term' do
+      u = create :user
+      get :potential_applicants, format: :json, group_id: @group.id, search_term: u.display_name
+      users = assigns(:available_users)
+      expect(users).to include u
+      expect(users).to_not include @user2
+    end
+
+    it 'should not return users who are already in the group' do
+      get :potential_applicants, format: :json, group_id: @group.id
+      users = assigns(:available_users)
+      expect(users).to_not include @user
+      expect(users).to include @user2
+    end
+
+    it 'should return a paginated response' do
+      get :potential_applicants, format: :json, group_id: @group.id
+      json = parse_json response.body
+      expect(json['results']).to_not be_nil
+      expect(json['page']).to_not be_nil
     end
   end
 end

@@ -178,18 +178,16 @@ autocompleteGroupParams = ->
 
       success: (data) ->
         data = $.map data['results'], (obj, i) ->
-          {label: obj['name'], value: obj['id']}
+          {label: obj.name, value: obj.id, obj: obj}
         response data
 
   select:(event, ui) ->
     event.preventDefault()
     return unless ui.item
-    $('#userInputSearch').val(ui.item.label)
-    $('#userInputSearch').attr('data-user-id', ui.item.value)
+    console.log(ui.item)
+    $( "#selected-group-index-page" ).removeClass( "hidden" )
+
   }
-
-
-
 
 autocompleteUserParams = ->
   group = window.location.pathname.match(/\/groups\/(\d+)/)[1]

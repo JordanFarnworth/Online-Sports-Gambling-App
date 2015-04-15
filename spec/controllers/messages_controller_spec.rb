@@ -113,7 +113,7 @@ RSpec.describe MessagesController, type: :controller do
       expect(response.status).to eql 200
 
       json = JSON.parse(response.body)
-      expect(json.length).to eql 1
+        expect(json.length).to eql 1
       expect(json.map { |j| j['id'] }).to include(@user.id)
       expect(json.map { |j| j['display_name'] }).to include(@user.display_name)
     end
