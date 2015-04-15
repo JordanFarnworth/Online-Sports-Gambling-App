@@ -28,6 +28,9 @@ class Ability
       can :search_recipients, Message
 
       # Group permissions
+      can :update, GroupMembership
+      can :potential_applicants, Group
+      can :destroy, GroupMembership
       can :create, Group
       can :create, GroupMembership
       can :manage, Group
@@ -42,6 +45,10 @@ class Ability
         can :read, User
         can :manage, RoleMembership
       end
+
+      # Payments
+      can :create, Payment
+      can :read, Payment, user_id: user.id
     end
   end
 end

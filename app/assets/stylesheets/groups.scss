@@ -19,3 +19,14 @@
     display: inline-block;
   }
 }
+
+.user-modify {
+  display: none;
+}
+
+.dl-horizontal:hover {
+  .user-modify {
+    display: inline-block;
+  }
+}
+

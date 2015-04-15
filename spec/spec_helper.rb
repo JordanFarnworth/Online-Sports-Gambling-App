@@ -152,6 +152,21 @@ def user_with_role(opts = {})
 end
 alias :role_with_user :user_with_role
 
+def transaction(opts = {})
+  @user ||= create :user
+  opts[:transaction_type] ||= 'payment'
+  opts[:amount] ||= 0.01
+  @transaction = @user.monetary_transactions.create transaction_type: opts[:transaction_type], amount: opts[:amount]
+end
+
+def payment(opts = {})
+  @user ||= create :user
+  opts[:gateway] ||= 'braintree'
+  opts[:amount] ||= 0.01
+  @payment = @user.payments.create gateway: opts[:gateway], monetary_transaction: opts[:transaction]
+  @payment
+end
+
 def parse_json(data)
   JSON.parse data
 end

@@ -25,6 +25,13 @@ class Group < ActiveRecord::Base
     rp
   end
 
+  def remove_user(user)
+    rp = GroupMembership.find_by(group: self, user: user)
+    return nil unless rp
+    rp.update state: :deleted
+    rp
+  end
+
   def default_settings
     self.settings[:max_users] ||= 10
     self.settings[:availability] ||= "public"

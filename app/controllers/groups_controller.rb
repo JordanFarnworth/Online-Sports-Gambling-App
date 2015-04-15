@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
   include Api::V1::User
   include Api::V1::GroupMembership
 
-  before_action :find_group, only: [:users, :show, :edit, :update, :destroy]
+  before_action :find_group, only: [:users, :show, :edit, :update, :destroy, :potential_applicants]
   before_action :find_groups, only: [:index]
 
   load_and_authorize_resource
@@ -19,6 +19,10 @@ class GroupsController < ApplicationController
   end
 
   def index
+    if params[:search_term]
+      t = params[:search_term]
+      @public_groups = @groups.where('name LIKE ?', "%#{t}%")
+    end
     respond_to do |format|
       format.json do
         render json: pagination_json(@groups, :groups_json), status: :ok
@@ -86,6 +90,20 @@ class GroupsController < ApplicationController
       end
     end
   end
+
+  def potential_applicants
+    @available_users = User.where.not(id: @group.users.pluck(:id))
+    if params[:search_term]
+      t = params[:search_term]
+      @available_users = @available_users.where('username LIKE ? OR display_name LIKE ? OR email LIKE ?', "%#{t}%", "%#{t}%", "%#{t}%")
+    end
+    respond_to do |format|
+      format.json do
+        render json: pagination_json(@available_users, :users_json), status: :ok
+      end
+    end
+  end
+
 
 
   def users

@@ -1,0 +1,32 @@
+<%= render partial: 'payment_template' %>
+<div class="row slight-margins">
+  <div class="col-md-12">
+    <div role="tabpanel">
+      <ul class="nav nav-pills" role="tablist" style="margin-bottom: 20px;">
+        <li role="presentation" class="active"><a href="#initiated_payments" aria-controls="home" role="tab" data-toggle="tab">Initiated</a></li>
+        <li role="presentation"><a href="#processed_payments" aria-controls="home" role="tab" data-toggle="tab">Processed</a></li>
+        <li role="presentation"><a href="#failed_payments" aria-controls="home" role="tab" data-toggle="tab">Failed</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="initiated_payments">
+          <i class="fa fa-cog fa-spin fa-2x"></i>
+          <div class="list-group"></div>
+          <ul class="pagination"></ul>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="processed_payments">
+          <i class="fa fa-cog fa-spin fa-2x"></i>
+          <div class="list-group"></div>
+          <ul class="pagination"></ul>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="failed_payments">
+          <i class="fa fa-cog fa-spin fa-2x"></i>
+          <div class="list-group"></div>
+          <ul class="pagination"></ul>
+        </div>
+      </div>
+    </div>
+    <div>
+      <%= link_to 'New Payment', new_payment_path, class: 'btn btn-primary' %>
+    </div>
+  </div>
+</div>
