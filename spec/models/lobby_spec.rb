@@ -21,11 +21,6 @@ RSpec.describe Lobby, type: :model do
       @lobby.betting_ends_at = 1.week.ago
       expect(@lobby.save).to be_falsey
     end
-
-    it 'should receive default settings' do
-      expect(@lobby.settings.keys).to include :maximum_bet
-      expect(@lobby.settings.keys).to include :minimum_bet
-    end
   end
 
   describe 'associations' do

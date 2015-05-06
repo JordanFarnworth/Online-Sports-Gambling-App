@@ -8,19 +8,20 @@ end
 
 class Lobby < ActiveRecord::Base
   belongs_to :group
+  belongs_to :event_day
 
   validates_inclusion_of :state, in: %w(active completed deleted)
   validates_with LobbyDateValidator
+  validates_presence_of :event_day
 
   scope :active, -> { where(state: :active) }
   scope :completed, -> { where(state: :completed) }
-  scope :allows_betting, -> { where('betting_begins_at < ? AND betting_ends_at > ?', Time.now, Time.now) }
+  scope :allows_betting, -> { active.where('betting_begins_at < ? AND betting_ends_at > ?', Time.now, Time.now) }
 
   serialize :settings, Hash
 
   default_settings = {
-    maximum_bet: 10.0,
-    minimum_bet: 1.0
+
   }
 
   after_initialize do
