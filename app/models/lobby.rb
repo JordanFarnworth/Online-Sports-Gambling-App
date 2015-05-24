@@ -8,6 +8,7 @@ end
 
 class Lobby < ActiveRecord::Base
   belongs_to :group
+  belongs_to :event
 
   validates_inclusion_of :state, in: %w(active completed deleted)
   validates_with LobbyDateValidator

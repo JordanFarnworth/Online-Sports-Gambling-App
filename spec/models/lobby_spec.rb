@@ -32,6 +32,10 @@ RSpec.describe Lobby, type: :model do
     it 'should belong to a group' do
       expect(@lobby).to respond_to :group
     end
+
+    it 'should belong to an event' do
+      expect(@lobby).to respond_to :event
+    end
   end
 
   describe 'scoping' do
