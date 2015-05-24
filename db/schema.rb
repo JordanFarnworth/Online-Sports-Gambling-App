@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506014445) do
+ActiveRecord::Schema.define(version: 20150328020054) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -41,35 +41,6 @@ ActiveRecord::Schema.define(version: 20150506014445) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
-  create_table "event_days", force: :cascade do |t|
-    t.string   "event_day_tag"
-    t.string   "sport"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "friend_links", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "friend_id"
-    t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "friend_links", ["friend_id"], name: "index_friend_links_on_friend_id"
-  add_index "friend_links", ["user_id"], name: "index_friend_links_on_user_id"
-
-  create_table "friends", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "other_user_id"
-    t.string   "state"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  add_index "friends", ["other_user_id"], name: "index_friends_on_other_user_id"
-  add_index "friends", ["user_id"], name: "index_friends_on_user_id"
-
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "group_id"
@@ -98,11 +69,8 @@ ActiveRecord::Schema.define(version: 20150506014445) do
     t.string   "state"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.decimal  "bet_amount"
-    t.integer  "event_day_id"
   end
 
-  add_index "lobbies", ["event_day_id"], name: "index_lobbies_on_event_day_id"
   add_index "lobbies", ["group_id"], name: "index_lobbies_on_group_id"
 
   create_table "login_sessions", force: :cascade do |t|
