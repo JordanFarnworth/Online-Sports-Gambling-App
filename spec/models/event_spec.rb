@@ -84,4 +84,19 @@ RSpec.describe Event, type: :model do
       expect(lobby.reload.state).to eql 'deleted'
     end
   end
+
+  describe 'event participants' do
+    let(:event) { create :event }
+
+    it 'has many event participants' do
+      expect(event).to respond_to :event_participants
+    end
+
+    it 'returns a winner only when marked as complete' do
+      ep = create :event_participant, event: event
+      expect(event.winner).to be_nil
+      event.complete
+      expect(event.winner).to eql ep
+    end
+  end
 end

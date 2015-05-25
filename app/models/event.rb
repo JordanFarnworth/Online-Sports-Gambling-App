@@ -1,5 +1,6 @@
 class Event < ActiveRecord::Base
   has_many :lobbies, dependent: :destroy
+  has_many :event_participants, dependent: :destroy
 
   validates_inclusion_of :state, in: %w(not_started in_progress completed)
   validates_presence_of :event_starts_at
@@ -21,5 +22,13 @@ class Event < ActiveRecord::Base
 
   def complete
     update state: :completed
+  end
+
+  def completed?
+    state == 'completed'
+  end
+
+  def winner
+    event_participants.ordered.first if completed?
   end
 end
