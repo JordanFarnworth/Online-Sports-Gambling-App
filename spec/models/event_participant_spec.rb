@@ -25,6 +25,14 @@ RSpec.describe EventParticipant, type: :model do
     end
   end
 
+  describe 'associations' do
+    let(:event_participant) { create :event_participant }
+
+    it 'has many bets' do
+      expect(event_participant).to respond_to :bets
+    end
+  end
+
   describe 'scoping' do
     let(:event_participant) { create :event_participant }
 

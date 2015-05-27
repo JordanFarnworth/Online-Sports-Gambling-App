@@ -26,6 +26,11 @@ RSpec.describe Lobby, type: :model do
       expect(@lobby.settings.keys).to include :maximum_bet
       expect(@lobby.settings.keys).to include :minimum_bet
     end
+
+    it 'requires a numeric bet amount' do
+      @lobby.bet_amount = 'asdf'
+      expect(@lobby.save).to be_falsey
+    end
   end
 
   describe 'associations' do
@@ -35,6 +40,10 @@ RSpec.describe Lobby, type: :model do
 
     it 'should belong to an event' do
       expect(@lobby).to respond_to :event
+    end
+
+    it 'has many bets' do
+      expect(@lobby).to respond_to :bets
     end
   end
 
@@ -70,9 +79,18 @@ RSpec.describe Lobby, type: :model do
     end
   end
 
-  it 'should mark a lobby as deleted' do
-    @lobby.destroy
-    expect(@lobby.reload.state).to eql 'deleted'
+  describe 'deletion' do
+    it 'should mark a lobby as deleted' do
+      @lobby.destroy
+      expect(@lobby.reload.state).to eql 'deleted'
+    end
+
+    it 'deletes all associated bets' do
+      bet = create :bet, lobby: @lobby
+      expect(bet.state).to eql 'active'
+      @lobby.destroy
+      expect(bet.reload.state).to eql 'cancelled'
+    end
   end
 
   it 'should correctly determine whether a lobby is open for bets' do

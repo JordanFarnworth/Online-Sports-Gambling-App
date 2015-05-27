@@ -42,6 +42,19 @@ RSpec.describe User, type: :model do
     it 'should receive a default state' do
       expect(@user.state).to eql 'active'
     end
+
+    it 'should receive a default balance' do
+      @user.update balance: nil
+      expect(@user.balance.to_f).to eql 0.0
+    end
+  end
+
+  describe 'associations' do
+    let(:user) { create :user }
+
+    it 'has many bets' do
+      expect(user).to respond_to :bets
+    end
   end
 
   describe 'messages' do

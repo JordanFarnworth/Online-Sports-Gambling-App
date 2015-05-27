@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :event_participant do
     event
-    name "MyString"
-    code "MyString"
+    name { SecureRandom.uuid }
   end
 
 end

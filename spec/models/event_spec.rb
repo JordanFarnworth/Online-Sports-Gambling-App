@@ -25,6 +25,13 @@ RSpec.describe Event, type: :model do
       event.sport = nil
       expect(event.save).to be_falsey
     end
+
+    it 'requires a unique code' do
+      event.save
+      ev2 = build :event
+      ev2.code = event.code
+      expect(ev2.save).to be_falsey
+    end
   end
 
   describe 'scoping' do

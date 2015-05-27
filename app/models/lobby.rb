@@ -9,9 +9,11 @@ end
 class Lobby < ActiveRecord::Base
   belongs_to :group
   belongs_to :event
+  has_many :bets
 
   validates_inclusion_of :state, in: %w(active completed deleted)
   validates_with LobbyDateValidator
+  validates_numericality_of :bet_amount
 
   scope :active, -> { where(state: :active) }
   scope :completed, -> { where(state: :completed) }
@@ -35,6 +37,7 @@ class Lobby < ActiveRecord::Base
   end
 
   def destroy
+    bets.destroy_all
     self.state = :deleted
     save
   end

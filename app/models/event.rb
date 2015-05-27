@@ -5,6 +5,7 @@ class Event < ActiveRecord::Base
   validates_inclusion_of :state, in: %w(not_started in_progress completed)
   validates_presence_of :event_starts_at
   validates_presence_of :sport
+  validates_uniqueness_of :code
 
   scope :not_started, -> { where(state: :not_started) }
   scope :in_progress, -> { where(state: :in_progress) }

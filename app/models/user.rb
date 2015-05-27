@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :monetary_transactions
   has_many :payments
   has_many :page_views
+  has_many :bets
 
   scope :active, -> { where(state: :active) }
   scope :deleted, -> { where(state: :deleted) }
@@ -25,6 +26,7 @@ class User < ActiveRecord::Base
   def infer_values
     self.state ||= :active
     self.braintree_customer_id ||= SecureRandom.hex 8
+    self.balance ||= 0.0
   end
 
   def all_messages

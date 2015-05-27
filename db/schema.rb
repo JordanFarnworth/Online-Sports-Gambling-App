@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525034857) do
+ActiveRecord::Schema.define(version: 20150526190922) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,6 +24,22 @@ ActiveRecord::Schema.define(version: 20150525034857) do
   end
 
   add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
+
+  create_table "bets", force: :cascade do |t|
+    t.integer  "lobby_id"
+    t.integer  "event_participant_id"
+    t.integer  "user_id"
+    t.integer  "monetary_transaction_id"
+    t.decimal  "bet_amount"
+    t.string   "state"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "bets", ["event_participant_id"], name: "index_bets_on_event_participant_id"
+  add_index "bets", ["lobby_id"], name: "index_bets_on_lobby_id"
+  add_index "bets", ["monetary_transaction_id"], name: "index_bets_on_monetary_transaction_id"
+  add_index "bets", ["user_id"], name: "index_bets_on_user_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -40,13 +56,6 @@ ActiveRecord::Schema.define(version: 20150525034857) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
-
-  create_table "event_days", force: :cascade do |t|
-    t.string   "event_day_tag"
-    t.string   "sport"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
 
   create_table "event_participants", force: :cascade do |t|
     t.integer  "event_id"
@@ -65,29 +74,10 @@ ActiveRecord::Schema.define(version: 20150525034857) do
     t.string   "state"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.string   "code"
   end
 
-  create_table "friend_links", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "friend_id"
-    t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "friend_links", ["friend_id"], name: "index_friend_links_on_friend_id"
-  add_index "friend_links", ["user_id"], name: "index_friend_links_on_user_id"
-
-  create_table "friends", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "other_user_id"
-    t.string   "state"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  add_index "friends", ["other_user_id"], name: "index_friends_on_other_user_id"
-  add_index "friends", ["user_id"], name: "index_friends_on_user_id"
+  add_index "events", ["code"], name: "index_events_on_code"
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "user_id"
@@ -117,12 +107,10 @@ ActiveRecord::Schema.define(version: 20150525034857) do
     t.string   "state"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.decimal  "bet_amount"
-    t.integer  "event_day_id"
     t.integer  "event_id"
+    t.decimal  "bet_amount"
   end
 
-  add_index "lobbies", ["event_day_id"], name: "index_lobbies_on_event_day_id"
   add_index "lobbies", ["event_id"], name: "index_lobbies_on_event_id"
   add_index "lobbies", ["group_id"], name: "index_lobbies_on_group_id"
 
