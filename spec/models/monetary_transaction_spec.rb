@@ -15,6 +15,7 @@ RSpec.describe MonetaryTransaction, type: :model do
       @transaction.transaction_type = 'asdf'
       expect(@transaction.save).to be_falsey
       @transaction.transaction_type = 'bet'
+      @transaction.amount = -1
       expect(@transaction.save).to be_truthy
     end
 
@@ -31,6 +32,13 @@ RSpec.describe MonetaryTransaction, type: :model do
     it 'should require an amount to be less than 10000' do
       @transaction.amount = 10001
       expect(@transaction.save).to be_falsey
+    end
+
+    it 'requires a negative amount for bets and withdrawls' do
+      @transaction.transaction_type = 'bet'
+      expect(@transaction.save).to be_falsey
+      @transaction.amount = -@transaction.amount
+      expect(@transaction.save).to be_truthy
     end
   end
 
@@ -65,6 +73,11 @@ RSpec.describe MonetaryTransaction, type: :model do
     it 'should link to a payment' do
       payment transaction: @transaction
       expect(@transaction.linked_transaction).to eql @payment
+    end
+
+    it 'links with a bet' do
+      bet = create :bet
+      expect(bet.monetary_transaction.linked_transaction).to eql bet
     end
   end
 end

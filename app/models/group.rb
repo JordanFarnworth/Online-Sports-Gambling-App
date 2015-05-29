@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
 
   has_many :group_memberships, -> { active }
   has_many :users, -> { active }, through: :group_memberships
+  has_many :lobbies
 
   serialize :settings, Hash
 

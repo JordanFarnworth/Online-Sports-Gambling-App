@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150328020054) do
+ActiveRecord::Schema.define(version: 20150526190922) do
 
   create_table "api_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,6 +24,22 @@ ActiveRecord::Schema.define(version: 20150328020054) do
   end
 
   add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
+
+  create_table "bets", force: :cascade do |t|
+    t.integer  "lobby_id"
+    t.integer  "event_participant_id"
+    t.integer  "user_id"
+    t.integer  "monetary_transaction_id"
+    t.decimal  "bet_amount"
+    t.string   "state"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "bets", ["event_participant_id"], name: "index_bets_on_event_participant_id"
+  add_index "bets", ["lobby_id"], name: "index_bets_on_lobby_id"
+  add_index "bets", ["monetary_transaction_id"], name: "index_bets_on_monetary_transaction_id"
+  add_index "bets", ["user_id"], name: "index_bets_on_user_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -40,6 +56,28 @@ ActiveRecord::Schema.define(version: 20150328020054) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "event_participants", force: :cascade do |t|
+    t.integer  "event_id"
+    t.string   "name"
+    t.string   "code"
+    t.decimal  "outcome"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "event_participants", ["event_id"], name: "index_event_participants_on_event_id"
+
+  create_table "events", force: :cascade do |t|
+    t.string   "sport"
+    t.datetime "event_starts_at"
+    t.string   "state"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "code"
+  end
+
+  add_index "events", ["code"], name: "index_events_on_code"
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "user_id"
@@ -69,8 +107,11 @@ ActiveRecord::Schema.define(version: 20150328020054) do
     t.string   "state"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.integer  "event_id"
+    t.decimal  "bet_amount"
   end
 
+  add_index "lobbies", ["event_id"], name: "index_lobbies_on_event_id"
   add_index "lobbies", ["group_id"], name: "index_lobbies_on_group_id"
 
   create_table "login_sessions", force: :cascade do |t|

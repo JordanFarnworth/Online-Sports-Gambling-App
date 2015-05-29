@@ -1,11 +1,13 @@
 class MonetaryTransaction < ActiveRecord::Base
   belongs_to :user
   has_one :payment
+  has_one :bet
 
   validates_presence_of :user
   validates_inclusion_of :state, in: %w(active cancelled)
-  validates_inclusion_of :transaction_type, in: %w(payment withdrawal bet)
-  validates_numericality_of :amount, greater_than: 0.0, less_than: 10000.0
+  validates_inclusion_of :transaction_type, in: %w(payment withdrawal bet award)
+  validates_numericality_of :amount, greater_than: -10000.0, less_than: 0.0, if: '%w(withdrawl bet).include?(transaction_type)'
+  validates_numericality_of :amount, greater_than: 0.0, less_than: 10000.0, if: '%w(payment award).include?(transaction_type)'
 
   scope :active, -> { where(state: :active) }
 
@@ -23,6 +25,11 @@ class MonetaryTransaction < ActiveRecord::Base
   end
 
   def linked_transaction
-    payment if transaction_type == 'payment'
+    case transaction_type
+    when 'payment'
+      payment
+    when 'bet'
+      bet
+    end
   end
 end
